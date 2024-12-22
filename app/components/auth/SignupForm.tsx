@@ -3,19 +3,65 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FcGoogle } from 'react-icons/fc';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 const SignupForm = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle signup logic here
+    setError(null);
+    setLoading(true);
+
+    if (password !== confirmPassword) {
+      setError("Passwords don't match");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        router.push('/login');
+        alert('Please check your email to verify your account');
+      }
+    } catch (error: any) {
+      console.error("Error signing up:", error);
+      setError(error.message || "An error occurred while signing up.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleSignup = () => {
-    // Implement Google OAuth signup logic here
+  const handleGoogleSignup = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Error signing up with Google:", error);
+      setError(error.message || "An error occurred while signing up with Google.");
+    }
   };
 
   return (

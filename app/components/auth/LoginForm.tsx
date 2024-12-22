@@ -3,18 +3,55 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FcGoogle } from 'react-icons/fc';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    setError(null);
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        router.push('/dashboard'); // Or wherever you want to redirect after login
+        router.refresh();
+      }
+    } catch (error: any) {
+      console.error("Error signing in:", error);
+      setError(error.message || "An error occurred while signing in.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    // Implement Google OAuth logic here
+  const handleGoogleLogin = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Error signing in with Google:", error);
+      setError(error.message || "An error occurred while signing in with Google.");
+    }
   };
 
   return (
@@ -22,12 +59,19 @@ const LoginForm = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login to Winterfell
+            Welcome back
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Welcome back to Winterfell
+            Sign in to your account
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+            {error}
+          </div>
+        )}
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
@@ -60,20 +104,13 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot your password?
-              </Link>
-            </div>
-          </div>
-
           <div>
             <button
               type="submit"
+              disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Sign in
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
