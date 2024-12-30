@@ -45,13 +45,17 @@ class NavigationAtom extends BaseComponent implements NavigationProps {
 
   public render(): void {
     console.log('Rendering NavigationAtom with:', this.icon, this.label, this.badgeText);
-    this.shadowRoot.innerHTML = `
-      <div class="navigation-item">
-        <span class="icon">${this.icon}</span>
-        <span class="label">${this.label}</span>
-        ${this.badgeText ? `<span class="badge">${this.badgeText}</span>` : ''}
-      </div>
-    `;
+    if (this.shadowRoot) {
+        this.shadowRoot.innerHTML = `
+            <div class="navigation-item">
+                <span class="icon">${this.icon}</span>
+                <span class="label">${this.label}</span>
+                ${this.badgeText ? `<span class="badge">${this.badgeText}</span>` : ''}
+            </div>
+        `;
+    } else {
+        console.error('Shadow root is not available.');
+    }
   }
 }
 

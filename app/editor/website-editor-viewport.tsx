@@ -130,6 +130,16 @@ const componentRegistry: Record<string, ComponentDefinition> = {
     },
     editableProps: ['variant', 'padding', 'elevation', 'header', 'content', 'imageUrl']
   },
+  NavigationAtom: {
+    type: 'molecules',
+    name: 'Navigation',
+    defaultProps: {
+      icon: '',
+      label: 'Navigation Label',
+      badgeText: ''
+    },
+    editableProps: ['icon', 'label', 'badgeText']
+  },
   typography: {
     type: 'atoms',
     name: 'Typography',
@@ -143,16 +153,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
     },
     editableProps: ['variant', 'weight', 'align', 'text', 'truncate', 'italic', 'color']
   },
-  NavigationAtom: {
-    type: 'atoms',
-    name: 'Navigation',
-    defaultProps: {
-      icon: '',
-      label: 'Navigation Label',
-      badgeText: ''
-    },
-    editableProps: ['icon', 'label', 'badgeText']
-  },
+  
 };
 
 // Components
