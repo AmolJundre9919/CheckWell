@@ -11,6 +11,7 @@ import '../site/atoms/inputs/InputAtom';
 import '../site/atoms/display/BadgeAtom';
 import '../site/atoms/display/AvatarAtom';
 import '../site/molecules/CardMolecule';
+import NavigationAtom from '../site/atoms/navigation/NavigationAtom';
 
 // Types
 type ComponentCategory = 'atoms' | 'molecules' | 'organisms';
@@ -141,7 +142,17 @@ const componentRegistry: Record<string, ComponentDefinition> = {
       italic: false
     },
     editableProps: ['variant', 'weight', 'align', 'text', 'truncate', 'italic', 'color']
-  }
+  },
+  NavigationAtom: {
+    type: 'atoms',
+    name: 'Navigation',
+    defaultProps: {
+      icon: '',
+      label: 'Navigation Label',
+      badgeText: ''
+    },
+    editableProps: ['icon', 'label', 'badgeText']
+  },
 };
 
 // Components
