@@ -1,4 +1,5 @@
-import { BaseComponent } from '../BaseComponent';
+import { Theme, defaultTheme } from "../../theme/theme";
+import { BaseComponent } from "../BaseComponent";
 
 type InputType = 'text' | 'email' | 'password' | 'number' | 'tel';
 
@@ -18,6 +19,7 @@ export class InputAtom extends BaseComponent implements InputProps {
   label: string = '';
   error: string = '';
   required: boolean = false;
+  protected theme: Theme = defaultTheme;
 
   static get observedAttributes(): string[] {
     return ['type', 'placeholder', 'value', 'label', 'error', 'required'];

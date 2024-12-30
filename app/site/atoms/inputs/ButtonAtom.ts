@@ -1,4 +1,4 @@
-import { BaseComponent } from '../BaseComponent';
+import { BaseComponent } from "../BaseComponent";
 
 // Types for button properties
 type ButtonVariant = 'primary' | 'secondary';

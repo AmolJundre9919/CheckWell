@@ -1,4 +1,5 @@
-import { BaseComponent } from '../BaseComponent';
+import { BaseComponent } from "../BaseComponent";
+import { Theme, defaultTheme } from "../../theme/theme";
 
 type AvatarSize = 'sm' | 'md' | 'lg';
 
@@ -14,6 +15,7 @@ export class AvatarAtom extends BaseComponent implements AvatarProps {
   src?: string;
   alt: string = '';
   initials?: string;
+  protected theme: Theme = defaultTheme;
 
   static get observedAttributes(): string[] {
     return ['size', 'src', 'alt', 'initials'];

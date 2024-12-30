@@ -2,6 +2,7 @@ import * as React from "react"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'outline'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

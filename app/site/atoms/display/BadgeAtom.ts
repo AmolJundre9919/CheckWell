@@ -1,4 +1,5 @@
-import { BaseComponent } from '../BaseComponent';
+import { Theme, defaultTheme } from "../../theme/theme";
+import { BaseComponent } from "../BaseComponent";
 
 type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error';
 
@@ -10,6 +11,7 @@ interface BadgeProps {
 export class BadgeAtom extends BaseComponent implements BadgeProps {
   variant: BadgeVariant = 'default';
   text: string = '';
+  protected theme: Theme = defaultTheme;
 
   static get observedAttributes(): string[] {
     return ['variant', 'text'];

@@ -29,7 +29,7 @@ app/site/
 Create a new file in the appropriate directory (`atoms/` or `molecules/`). Use the following template:
 
 ```typescript
-import { BaseComponent } from '../BaseComponent';
+import { BaseComponent } from "app/site/Components";
 
 // Define component props interface
 interface YourComponentProps {
@@ -151,7 +151,7 @@ Here's an example of adding a new Toggle component:
 
 ```typescript
 // atoms/inputs/ToggleAtom.ts
-import { BaseComponent } from '../BaseComponent';
+import { BaseComponent } from "app/site/Components";
 
 interface ToggleProps {
   checked: boolean;

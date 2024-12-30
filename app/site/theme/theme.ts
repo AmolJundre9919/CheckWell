@@ -6,9 +6,8 @@ export interface ThemeColors {
   surface: string;
   text: string;
   error: string;
-  success: string;
   warning: string;
-  info: string;
+  success: string;
 }
 
 export interface ThemeSpacing {
@@ -26,20 +25,19 @@ export interface Theme {
 
 export const defaultTheme: Theme = {
   colors: {
-    primary: '#0066cc',
-    secondary: '#6c757d',
-    accent: '#ff4081',
+    primary: '#0066ff',
+    secondary: '#e5e7eb',
+    accent: '#6366f1',
     background: '#ffffff',
-    surface: '#f8f9fa',
-    text: '#212529',
-    error: '#dc3545',
-    success: '#28a745',
-    warning: '#ffc107',
-    info: '#17a2b8'
+    surface: '#ffffff',
+    text: '#000000',
+    error: '#ef4444',
+    warning: '#fbbf24',
+    success: '#10b981'
   },
   spacing: {
-    xs: '0.25rem',
-    sm: '0.5rem',
+    xs: '0.5rem',
+    sm: '0.75rem',
     md: '1rem',
     lg: '1.5rem',
     xl: '2rem'

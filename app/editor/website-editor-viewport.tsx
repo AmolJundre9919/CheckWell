@@ -128,6 +128,19 @@ const componentRegistry: Record<string, ComponentDefinition> = {
       imageUrl: ''
     },
     editableProps: ['variant', 'padding', 'elevation', 'header', 'content', 'imageUrl']
+  },
+  typography: {
+    type: 'atoms',
+    name: 'Typography',
+    defaultProps: {
+      variant: 'p',
+      weight: 'normal',
+      align: 'left',
+      text: 'Sample text',
+      truncate: false,
+      italic: false
+    },
+    editableProps: ['variant', 'weight', 'align', 'text', 'truncate', 'italic', 'color']
   }
 };
 
@@ -277,6 +290,19 @@ const EditableComponent: React.FC<EditableComponentProps> = ({
           </div>
         </ui-card>
       )}
+      
+      {type === 'typography' && (
+        <ui-typography
+          variant={props.variant}
+          weight={props.weight}
+          align={props.align}
+          color={props.color}
+          truncate={props.truncate}
+          italic={props.italic}
+        >
+          {props.text}
+        </ui-typography>
+      )}
     </>
   );
 };
@@ -422,7 +448,8 @@ const ResizableComponent: React.FC<{
   const handleResizeStart = (direction: string) => {
     setResizing(direction);
     setInitialSize(component.size);
-    setInitialMousePos({ x: window.event?.clientX || 0, y: window.event?.clientY || 0 });
+    const mouseEvent = window.event as MouseEvent;
+    setInitialMousePos({ x: mouseEvent?.clientX || 0, y: mouseEvent?.clientY || 0 });
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
