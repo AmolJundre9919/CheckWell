@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import { Theme, defaultTheme } from '../theme/theme';
+import { Theme, defaultTheme } from './theme/theme';
 
 interface ComponentProps {
   [key: string]: any;
@@ -19,6 +19,7 @@ declare global {
     'ui-avatar': HTMLElement;
     'ui-card': HTMLElement;
     'ui-typography': HTMLElement;
+    'ui-search-bar': HTMLElement;
   }
 }
 

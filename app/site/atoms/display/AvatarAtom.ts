@@ -1,4 +1,4 @@
-import { BaseComponent } from "../BaseComponent";
+import { BaseComponent } from "../../BaseComponent";
 import { Theme, defaultTheme } from "../../theme/theme";
 
 type AvatarSize = 'sm' | 'md' | 'lg';

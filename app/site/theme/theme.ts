@@ -8,6 +8,7 @@ export interface ThemeColors {
   error: string;
   warning: string;
   success: string;
+  border: string;
 }
 
 export interface ThemeSpacing {
@@ -18,9 +19,18 @@ export interface ThemeSpacing {
   xl: string;
 }
 
+export interface ThemeTypography {
+  xs: string;
+  sm: string;
+  base: string;
+  lg: string;
+  xl: string;
+}
+
 export interface Theme {
   colors: ThemeColors;
   spacing: ThemeSpacing;
+  typography: ThemeTypography;
 }
 
 export const defaultTheme: Theme = {
@@ -33,7 +43,8 @@ export const defaultTheme: Theme = {
     text: '#000000',
     error: '#ef4444',
     warning: '#fbbf24',
-    success: '#10b981'
+    success: '#10b981',
+    border: '#e2e8f0'
   },
   spacing: {
     xs: '0.5rem',
@@ -41,5 +52,12 @@ export const defaultTheme: Theme = {
     md: '1rem',
     lg: '1.5rem',
     xl: '2rem'
+  },
+  typography: {
+    xs: '0.75rem',
+    sm: '0.875rem',
+    base: '1rem',
+    lg: '1.125rem',
+    xl: '1.25rem'
   }
 }; 

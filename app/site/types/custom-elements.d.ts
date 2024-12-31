@@ -49,6 +49,35 @@ declare global {
         truncate?: boolean;
         italic?: boolean;
       }, HTMLElement>;
+
+      'ui-search-bar': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        value?: string;
+        variant?: 'default' | 'outlined';
+        size?: 'sm' | 'md' | 'lg';
+        disabled?: boolean;
+        clearable?: boolean;
+        placeholder?: string;
+      }, HTMLElement>;
+
+      'ui-logo': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        src?: string;
+        alt?: string;
+        width?: string;
+        height?: string;
+      }, HTMLElement>;
+
+      'ui-navigation-link': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        href?: string;
+        text?: string;
+        active?: boolean;
+      }, HTMLElement>;
+
+      'ui-header': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        variant?: 'default' | 'transparent';
+        sticky?: boolean;
+        logoSrc?: string;
+        logoAlt?: string;
+      }, HTMLElement>;
     }
   }
 }
@@ -60,6 +89,9 @@ declare module 'app/site/Components' {
   export * from './atoms/display/AvatarAtom';
   export * from './atoms/display/TypographyAtom';
   export * from './molecules/CardMolecule';
+  export * from './molecules/SearchBarMolecule';
+  export * from './molecules/HeaderMolecule';
+  export * from './atoms/display/LogoAtom';
 }
 
 export {}; 

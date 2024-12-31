@@ -5,13 +5,14 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Monitor, Smartphone, Plus, X, ChevronRight, ChevronDown, Square as ButtonIcon, Nut as InputIcon, Badge as BadgeIcon, User as AvatarIcon, Type as TypographyIcon, Image as LogoIcon, Link as NavigationLinkIcon, Layout as HeaderIcon, IdCardIcon, Upload } from 'lucide-react';
+import { Monitor, Smartphone, Plus, X, ChevronRight, ChevronDown, Square as ButtonIcon, Nut as InputIcon, Badge as BadgeIcon, User as AvatarIcon, Type as TypographyIcon, Image as LogoIcon, Link as NavigationLinkIcon, Layout as HeaderIcon, IdCardIcon, Upload, SearchCodeIcon } from 'lucide-react';
 import '../site/atoms/inputs/ButtonAtom';
 import '../site/atoms/inputs/InputAtom';
 import '../site/atoms/display/BadgeAtom';
 import '../site/atoms/display/AvatarAtom';
 import '../site/molecules/CardMolecule';
-import NavigationAtom from '../site/atoms/navigation/NavigationAtom';
+import '../site/molecules/SearchBarMolecule';
+import '../site/atoms/display/LogoAtom';
 
 // Types
 type ComponentCategory = 'atoms' | 'molecules' | 'organisms';
@@ -92,6 +93,16 @@ const generateComponentHTML = (component: PlacedComponent): string => {
         ${props.header ? `<h3 slot="header">${props.header}</h3>` : ''}
         ${props.content}
       </ui-card>`;
+    case 'searchBar':
+      return `<ui-search-bar
+        placeholder="${props.placeholder}"
+        variant="${props.variant}"
+        size="${props.size}"
+        ${props.icon ? 'icon' : ''}
+        ${props.disabled ? 'disabled' : ''}
+        ${props.clearable ? 'clearable' : ''}
+        style="${styles}"
+      ></ui-search-bar>`;
     default:
       return '';
   }
@@ -240,6 +251,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   NavigationAtom: {
     type: 'molecules',
     name: 'Navigation',
+    icon: <NavigationLinkIcon className="w-4 h-4" />,
     defaultProps: {
       icon: '',
       label: 'Navigation Label',
@@ -261,9 +273,6 @@ const componentRegistry: Record<string, ComponentDefinition> = {
     },
     editableProps: ['variant', 'weight', 'align', 'text', 'truncate', 'italic', 'color']
   },
-<<<<<<< HEAD
-  
-=======
   logo: {
     type: 'atoms',
     name: 'Logo',
@@ -298,8 +307,21 @@ const componentRegistry: Record<string, ComponentDefinition> = {
       logoAlt: 'Site Logo'
     },
     editableProps: ['variant', 'sticky', 'logoSrc', 'logoAlt']
+  },
+  searchBar: {
+    type: 'molecules',
+    name: 'Search Bar',
+    icon: <SearchCodeIcon className="w-4 h-4" />,
+    defaultProps: {
+      placeholder: 'Search...',
+      variant: 'default',
+      size: 'md',
+      disabled: false,
+      clearable: true,
+      value: ''
+    },
+    editableProps: ['placeholder', 'variant', 'size', 'disabled', 'clearable']
   }
->>>>>>> e982dcf5990352b79cf65cd1f5ea2b9a0209dfdf
 };
 
 // Components
@@ -484,6 +506,43 @@ const EditableComponent: React.FC<EditableComponentProps> = ({
         >
           {props.text}
         </ui-typography>
+      )}
+
+      {type === 'searchBar' && (
+        <ui-search-bar
+          value={props.value}
+          placeholder={props.placeholder}
+          variant={props.variant}
+          size={props.size}
+          disabled={props.disabled}
+          clearable={props.clearable}
+        />
+      )}
+
+      {type === 'logo' && (
+        <ui-logo
+          src={props.src}
+          alt={props.alt}
+          width={props.width}
+          height={props.height}
+        />
+      )}
+
+      {type === 'navigationLink' && (
+        <ui-navigation-link
+          href={props.href}
+          text={props.text}
+          active={props.active}
+        />
+      )}
+
+      {type === 'header' && (
+        <ui-header
+          variant={props.variant}
+          sticky={props.sticky}
+          logoSrc={props.logoSrc}
+          logoAlt={props.logoAlt}
+        />
       )}
     </>
   );

@@ -1,5 +1,5 @@
 import { Theme, defaultTheme } from "../../theme/theme";
-import { BaseComponent } from "../BaseComponent";
+import { BaseComponent } from "../../BaseComponent";
 
 type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
 type TypographyWeight = 'normal' | 'medium' | 'semibold' | 'bold';

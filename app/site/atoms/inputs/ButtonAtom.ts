@@ -1,4 +1,4 @@
-import { BaseComponent } from "../BaseComponent";
+import { BaseComponent } from "../../BaseComponent";
 
 // Types for button properties
 type ButtonVariant = 'primary' | 'secondary';
@@ -49,7 +49,7 @@ class ButtonAtom extends BaseComponent implements ButtonProps {
       }
 
       button.secondary {
-        background: #ffffff;
+        background: ${this.theme.colors.secondary};
         color: #0066cc;
         border: 1px solid #0066cc;
       }

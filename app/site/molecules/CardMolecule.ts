@@ -1,4 +1,4 @@
-import { BaseComponent } from "../atoms/BaseComponent";
+import { BaseComponent } from "../BaseComponent";
 
 interface CardProps {
   variant: 'default' | 'outlined' | 'elevated';

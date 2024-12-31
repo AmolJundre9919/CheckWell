@@ -1,5 +1,5 @@
 import { Theme, defaultTheme } from "../../theme/theme";
-import { BaseComponent } from "../BaseComponent";
+import { BaseComponent } from "../../BaseComponent";
 
 type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error';
 
