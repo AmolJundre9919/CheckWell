@@ -78,6 +78,21 @@ declare global {
         logoSrc?: string;
         logoAlt?: string;
       }, HTMLElement>;
+
+      'ui-divider': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        color?: string;
+        thickness?: number;
+        orientation?: 'horizontal' | 'vertical';
+        length?: string;
+        text?: string;
+      }, HTMLElement>;
+
+      'ui-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        name?: string;
+        size?: 'sm' | 'md' | 'lg';
+        color?: string;
+        strokeWidth?: number;
+      }, HTMLElement>;
     }
   }
 }

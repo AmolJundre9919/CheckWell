@@ -1,4 +1,4 @@
-import { BaseComponent } from "../BaseComponent";
+import { BaseComponent } from "../../BaseComponent";
 
 interface NavigationProps {
   icon: string; // Assuming icon is a string (could be an SVG or icon name)

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Monitor, Smartphone, Plus, X, ChevronRight, ChevronDown, Square as ButtonIcon, Nut as InputIcon, Badge as BadgeIcon, User as AvatarIcon, Type as TypographyIcon, Image as LogoIcon, Link as NavigationLinkIcon, Layout as HeaderIcon, IdCardIcon, Upload, SearchCodeIcon } from 'lucide-react';
+import { Monitor, Smartphone, Plus, X, ChevronRight, ChevronDown, Square as ButtonIcon, Nut as InputIcon, Badge as BadgeIcon, User as AvatarIcon, Type as TypographyIcon, Image as LogoIcon, Link as NavigationLinkIcon, Layout as HeaderIcon, IdCardIcon, Upload, SearchCodeIcon, Minus, Icon as IconIcon } from 'lucide-react';
 import '../site/atoms/inputs/ButtonAtom';
 import '../site/atoms/inputs/InputAtom';
 import '../site/atoms/display/BadgeAtom';
@@ -13,8 +13,10 @@ import '../site/atoms/display/AvatarAtom';
 import '../site/molecules/CardMolecule';
 import '../site/molecules/SearchBarMolecule';
 import '../site/atoms/display/LogoAtom';
+import '../site/atoms/display/DividerAtom';
+import '../site/atoms/display/IconAtom';
 
-// Types
+// Types C:\Cursor\Winterfell\app\editor\website-editor-viewport.tsx
 type ComponentCategory = 'atoms' | 'molecules' | 'organisms';
 type ViewMode = 'desktop' | 'mobile';
 
@@ -321,6 +323,31 @@ const componentRegistry: Record<string, ComponentDefinition> = {
       value: ''
     },
     editableProps: ['placeholder', 'variant', 'size', 'disabled', 'clearable']
+  },
+  divider: {
+    type: 'atoms',
+    name: 'Divider',
+    icon: <Minus className="w-4 h-4" />,
+    defaultProps: {
+      color: '#E5E7EB',
+      thickness: 1,
+      orientation: 'horizontal',
+      length: '100%',
+      text: 'Divider'
+    },
+    editableProps: ['color', 'thickness', 'orientation', 'length', 'text']
+  },
+  icon: {
+    type: 'atoms',
+    name: 'Icon',
+    icon: <IconIcon iconNode={[['path', { d: 'M3 12h18M3 6h18M3 18h18' }]]} className="w-4 h-4" />,
+    defaultProps: {
+      name: 'home',
+      size: 'md',
+      color: '#000000',
+      strokeWidth: 2
+    },
+    editableProps: ['name', 'size', 'color', 'strokeWidth']
   }
 };
 
@@ -542,6 +569,25 @@ const EditableComponent: React.FC<EditableComponentProps> = ({
           sticky={props.sticky}
           logoSrc={props.logoSrc}
           logoAlt={props.logoAlt}
+        />
+      )}
+
+      {type === 'divider' && (
+        <ui-divider
+          color={props.color}
+          thickness={props.thickness}
+          orientation={props.orientation}
+          length={props.length}
+          text={props.text}
+        />
+      )}
+
+      {type === 'icon' && (
+        <ui-icon
+          name={props.name}
+          size={props.size}
+          color={props.color}
+          strokeWidth={props.strokeWidth}
         />
       )}
     </>
@@ -828,10 +874,21 @@ const WebsiteEditor: React.FC = () => {
       y: snapToGrid(e.clientY - rect.top)
     };
 
+    // Add specific size handling for divider
+    const size = type === 'divider' 
+      ? {
+          width: GRID_SIZE * 32, // 256px default width
+          height: GRID_SIZE * 8  // 64px default height to accommodate text and padding
+        }
+      : { 
+          width: GRID_SIZE * 16, 
+          height: GRID_SIZE * 8 
+        };
+
     const newComponent: PlacedComponent = {
       type,
       position,
-      size: { width: GRID_SIZE * 16, height: GRID_SIZE * 8 }, // Default size
+      size,
       id: `${type}-${Date.now()}`,
       props: { ...componentRegistry[type]?.defaultProps }
     };
