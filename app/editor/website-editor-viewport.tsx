@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Monitor, Smartphone, Plus, X } from 'lucide-react';
+import { Monitor, Smartphone, Plus, X, ChevronRight, ChevronDown, Square as ButtonIcon, Nut as InputIcon, Badge as BadgeIcon, User as AvatarIcon, Type as TypographyIcon, Image as LogoIcon, Link as NavigationLinkIcon, Layout as HeaderIcon, IdCardIcon, Upload } from 'lucide-react';
 import '../site/atoms/inputs/ButtonAtom';
 import '../site/atoms/inputs/InputAtom';
 import '../site/atoms/display/BadgeAtom';
@@ -20,7 +20,7 @@ type ViewMode = 'desktop' | 'mobile';
 interface ComponentDefinition {
   type: ComponentCategory;
   name: string;
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
   defaultProps: Record<string, any>;
   editableProps: string[];
 }
@@ -71,14 +71,117 @@ const createComponentCopy = (component: PlacedComponent, offsetX = GRID_SIZE, of
   };
 };
 
+// Add this new utility function at the top with other utilities
+const generateComponentHTML = (component: PlacedComponent): string => {
+  const { type, props, position, size } = component;
+  const styles = `position: absolute; left: ${position.x}px; top: ${position.y}px; width: ${size.width}px; height: ${size.height}px;`;
+
+  switch (type) {
+    case 'button':
+      return `<ui-button variant="${props.variant}" size="${props.size}" style="${styles}">${props.text}</ui-button>`;
+    case 'input':
+      return `<ui-input type="${props.type}" placeholder="${props.placeholder}" label="${props.label}" ${props.required ? 'required' : ''} style="${styles}"></ui-input>`;
+    case 'badge':
+      return `<ui-badge variant="${props.variant}" text="${props.text}" style="${styles}"></ui-badge>`;
+    case 'avatar':
+      return `<ui-avatar size="${props.size}" ${props.src ? `src="${props.src}"` : ''} ${props.initials ? `initials="${props.initials}"` : ''} style="${styles}"></ui-avatar>`;
+    case 'typography':
+      return `<ui-typography variant="${props.variant}" weight="${props.weight}" align="${props.align}" ${props.color ? `color="${props.color}"` : ''} style="${styles}">${props.text}</ui-typography>`;
+    case 'card':
+      return `<ui-card variant="${props.variant}" padding="${props.padding}" elevation="${props.elevation}" style="${styles}">
+        ${props.header ? `<h3 slot="header">${props.header}</h3>` : ''}
+        ${props.content}
+      </ui-card>`;
+    default:
+      return '';
+  }
+};
+
+// Add this function to generate the complete website code
+const generateWebsiteCode = (components: PlacedComponent[]): { html: string, css: string, js: string } => {
+  const componentsHTML = components.map(generateComponentHTML).join('\n    ');
+  
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="website-container">
+    ${componentsHTML}
+    </div>
+    <script src="components.js"></script>
+</body>
+</html>`;
+
+  const css = `
+.website-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .website-container {
+        width: 100%;
+        padding: 0 1rem;
+    }
+}`;
+
+  // Import statements for the components
+  const js = `
+import './site/atoms/inputs/ButtonAtom';
+import './site/atoms/inputs/InputAtom';
+import './site/atoms/display/BadgeAtom';
+import './site/atoms/display/AvatarAtom';
+import './site/molecules/CardMolecule';
+import './site/atoms/display/TypographyAtom';`;
+
+  return { html, css, js };
+};
+
+// Add a publish function
+const handlePublish = async (components: PlacedComponent[]) => {
+  try {
+    const { html, css, js } = generateWebsiteCode(components);
+    
+    // Send the generated code to your backend
+    const response = await fetch('/api/publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+
+      },
+      body: JSON.stringify({ html, css, js }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to publish website');
+    }
+
+    const { url } = await response.json();
+    console.log(url);
+    // showToast(`Website published successfully! URL: ${url}`);
+  } catch (error) {
+    console.error('Error publishing website:', error);
+    // showToast('Failed to publish website');
+  }
+};
+
 // Component Registry
 const componentRegistry: Record<string, ComponentDefinition> = {
   button: {
     type: 'atoms',
     name: 'Button',
+    icon: <ButtonIcon className="w-4 h-4" />,
     defaultProps: {
       variant: 'primary',
       size: 'md',
+      
       text: 'Click me',
       icon: '',
       iconPosition: 'left'
@@ -88,6 +191,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   input: {
     type: 'atoms',
     name: 'Input',
+    icon: <InputIcon className="w-4 h-4" />,
     defaultProps: {
       type: 'text',
       placeholder: 'Enter text...',
@@ -100,6 +204,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   badge: {
     type: 'atoms',
     name: 'Badge',
+    icon: <BadgeIcon className="w-4 h-4" />,
     defaultProps: {
       variant: 'default',
       text: 'Badge'
@@ -109,6 +214,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   avatar: {
     type: 'atoms',
     name: 'Avatar',
+    icon: <AvatarIcon className="w-4 h-4" />,
     defaultProps: {
       size: 'md',
       initials: 'JD',
@@ -120,6 +226,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   card: {
     type: 'molecules',
     name: 'Card',
+    icon: <IdCardIcon className="w-4 h-4" />,
     defaultProps: {
       variant: 'default',
       padding: 'md',
@@ -143,6 +250,7 @@ const componentRegistry: Record<string, ComponentDefinition> = {
   typography: {
     type: 'atoms',
     name: 'Typography',
+    icon: <TypographyIcon className="w-4 h-4" />,
     defaultProps: {
       variant: 'p',
       weight: 'normal',
@@ -153,7 +261,45 @@ const componentRegistry: Record<string, ComponentDefinition> = {
     },
     editableProps: ['variant', 'weight', 'align', 'text', 'truncate', 'italic', 'color']
   },
+<<<<<<< HEAD
   
+=======
+  logo: {
+    type: 'atoms',
+    name: 'Logo',
+    icon: <LogoIcon className="w-4 h-4" />,
+    defaultProps: {
+      src: '/placeholder-logo.svg',
+      alt: 'Logo',
+      width: 'auto',
+      height: '40px'
+    },
+    editableProps: ['src', 'alt', 'width', 'height']
+  },
+  navigationLink: {
+    type: 'atoms',
+    name: 'Navigation Link',
+    icon: <NavigationLinkIcon className="w-4 h-4" />,
+    defaultProps: {
+      href: '#',
+      text: 'Link',
+      active: false
+    },
+    editableProps: ['href', 'text', 'active']
+  },
+  header: {
+    type: 'molecules',
+    name: 'Header',
+    icon: <HeaderIcon className="w-4 h-4" />,
+    defaultProps: {
+      variant: 'default',
+      sticky: false,
+      logoSrc: '/placeholder-logo.svg',
+      logoAlt: 'Site Logo'
+    },
+    editableProps: ['variant', 'sticky', 'logoSrc', 'logoAlt']
+  }
+>>>>>>> e982dcf5990352b79cf65cd1f5ea2b9a0209dfdf
 };
 
 // Components
@@ -184,6 +330,12 @@ const ViewportControl: React.FC<{
 const ComponentList: React.FC<{
   onDragStart: (type: string) => void;
 }> = ({ onDragStart }) => {
+  const [expandedCategories, setExpandedCategories] = useState<Record<ComponentCategory, boolean>>({
+    atoms: true,
+    molecules: true,
+    organisms: true
+  });
+
   const groupedComponents = useMemo(() => {
     const groups: Record<ComponentCategory, ComponentDefinition[]> = {
       atoms: [],
@@ -201,30 +353,48 @@ const ComponentList: React.FC<{
     return groups;
   }, []);
 
+  const toggleCategory = (category: ComponentCategory) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
+
   return (
-    <div className="w-64 space-y-6">
+    <div className="w-64 space-y-2 bg-gray-50 p-4 rounded-lg">
       {(Object.entries(groupedComponents) as [ComponentCategory, ComponentDefinition[]][]).map(
         ([category, components]) => (
-          <div key={category} className="space-y-2">
-            <h3 className="text-lg font-semibold capitalize">{category}</h3>
-            <div className="space-y-2">
-              {components.map((component) => (
-                <Card
-                  key={component.name}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData('componentType', component.name);
-                    onDragStart(component.name);
-                  }}
-                  className="p-3 cursor-move hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-2">
+          <div key={category} className="border border-gray-200 rounded-lg overflow-hidden">
+            <button
+              onClick={() => toggleCategory(category)}
+              className="w-full flex items-center justify-between p-3 bg-white hover:bg-gray-50 transition-colors"
+            >
+              <span className="font-medium capitalize">{category}</span>
+              {expandedCategories[category] ? (
+                <ChevronDown className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
+            </button>
+            
+            {expandedCategories[category] && (
+              <div className="p-2 grid grid-cols-2 gap-2 bg-gray-50">
+                {components.map((component) => (
+                  <Card
+                    key={component.name}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('componentType', component.name);
+                      onDragStart(component.name);
+                    }}
+                    className="p-2 cursor-move hover:bg-white transition-colors flex flex-col items-center gap-1"
+                  >
                     {component.icon}
-                    <span>{component.name}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                    <span className="text-xs text-center">{component.name}</span>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         )
       )}
@@ -553,6 +723,33 @@ const PreviewContainer: React.FC<{
   );
 };
 
+// Add a new collapsible panel component
+const CollapsiblePanel: React.FC<{
+  title: string;
+  children: React.ReactNode;
+}> = ({ title, children }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <div className="bg-gray-50 rounded-lg">
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="w-full flex items-center justify-between p-3 bg-white hover:bg-gray-50 transition-colors rounded-t-lg"
+      >
+        <span className="font-medium">{title}</span>
+        {isCollapsed ? (
+          <ChevronRight className="w-4 h-4" />
+        ) : (
+          <ChevronDown className="w-4 h-4" />
+        )}
+      </button>
+      <div className={`transition-all duration-300 ${isCollapsed ? 'h-0 overflow-hidden' : 'h-auto p-4'}`}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 const WebsiteEditor: React.FC = () => {
   const [view, setView] = useState<ViewMode>('desktop');
   const [placedComponents, setPlacedComponents] = useState<PlacedComponent[]>([]);
@@ -691,19 +888,9 @@ const WebsiteEditor: React.FC = () => {
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex gap-4">
-        <div className="w-64 space-y-6">
+        <CollapsiblePanel title="Components">
           <ComponentList onDragStart={() => setIsDragging(true)} />
-          <div className="space-y-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={showGrid}
-                onChange={(e) => setShowGrid(e.target.checked)}
-              />
-              Show Grid
-            </label>
-          </div>
-        </div>
+        </CollapsiblePanel>
         
         <div className="flex-1">
           <ViewportControl view={view} setView={setView} />
@@ -730,6 +917,20 @@ const WebsiteEditor: React.FC = () => {
             </div>
           </PreviewContainer>
         </div>
+
+        <CollapsiblePanel title="Settings">
+          <div className="space-y-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={showGrid}
+                onChange={(e) => setShowGrid(e.target.checked)}
+              />
+              Show Grid
+            </label>
+            {/* Add more settings here */}
+          </div>
+        </CollapsiblePanel>
       </div>
 
       {/* Update keyboard shortcut hint */}
@@ -811,6 +1012,19 @@ const WebsiteEditor: React.FC = () => {
       >
         Export HTML
       </Button>
+
+      {/* Add publish button */}
+      <div className="fixed bottom-4 left-4">
+        <Button
+          size="lg"
+          onClick={() => handlePublish(placedComponents)}
+          disabled={placedComponents.length === 0}
+          className="bg-green-500 hover:bg-green-600 text-white"
+        >
+          <Upload className="w-4 h-4 mr-2" />
+          Publish Website
+        </Button>
+      </div>
     </div>
   );
 };
