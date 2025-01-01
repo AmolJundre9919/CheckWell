@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./app/site",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
+    "declaration": false,
+    "isolatedModules": true,
+    "lib": ["DOM", "ES2015", "DOM.Iterable"]
+  },
+  "include": ["app/site/**/*.ts"],
+  "exclude": ["node_modules", "**/*.d.ts"]
+} 
