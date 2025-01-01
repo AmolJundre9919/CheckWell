@@ -65,6 +65,11 @@ const getComponentIcon = (name: string): string => {
     Card: '🗂️',
     SearchBar: '🔍',
     Header: '📑',
+    Navigation: '🔗',
+    NavigationLink: '🔗',
+    Grid: '📏',
+    Container: '📦',
+    Divider: '➖'
   };
   return icons[name] || '📦';
 };
@@ -80,23 +85,31 @@ const getDefaultProps = (name: string): Record<string, any> => {
     Card: { title: 'Card Title', content: 'Card Content' },
     SearchBar: { placeholder: 'Search...' },
     Header: { title: 'Header' },
+    Navigation: { icon: '🔗', label: 'Navigation Item' },
+    NavigationLink: { href: '#', text: 'Link', active: false },
     Grid: { columns: '12', gap: 'md' },
-    Container: { size: 'lg', padding: 'md' }
+    Container: { size: 'lg', padding: 'md' },
+    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' }
   };
   return defaults[name] || {};
 };
 
 const getEditableProps = (name: string): string[] => {
   const editableProps: Record<string, string[]> = {
-    Button: ['variant', 'children', 'disabled'],
-    Input: ['placeholder', 'type', 'disabled'],
-    Badge: ['variant', 'children'],
-    Avatar: ['src', 'alt', 'size'],
-    Typography: ['variant', 'children', 'color'],
+    Button: ['variant', 'text', 'disabled'],
+    Input: ['placeholder', 'type', 'disabled', 'label', 'required'],
+    Badge: ['variant', 'text'],
+    Avatar: ['src', 'alt', 'size', 'initials'],
+    Typography: ['variant', 'text', 'color', 'weight', 'align'],
     Logo: ['src', 'alt', 'width', 'height'],
-    Card: ['title', 'content', 'variant'],
-    SearchBar: ['placeholder'],
-    Header: ['title', 'subtitle'],
+    Card: ['title', 'content', 'variant', 'padding', 'elevation'],
+    SearchBar: ['placeholder', 'variant', 'size', 'disabled', 'clearable'],
+    Header: ['variant', 'sticky', 'logoSrc', 'logoAlt'],
+    Navigation: ['icon', 'label', 'badgeText'],
+    NavigationLink: ['href', 'text', 'active'],
+    Grid: ['columns', 'gap'],
+    Container: ['size', 'padding'],
+    Divider: ['color', 'thickness', 'orientation', 'length']
   };
   return editableProps[name] || [];
 };
@@ -112,6 +125,9 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Logo', 'atoms', 'ui-logo'),
   createComponentDefinition('Grid', 'atoms', 'ui-grid'),
   createComponentDefinition('Container', 'atoms', 'ui-container'),
+  createComponentDefinition('NavigationLink', 'atoms', 'ui-nav-link'),
+  createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
+  createComponentDefinition('Divider', 'atoms', 'ui-divider'),
 
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),

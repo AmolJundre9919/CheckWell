@@ -87,6 +87,19 @@ declare global {
       'ui-container': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
         size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
         padding?: 'none' | 'sm' | 'md' | 'lg';
+      'ui-divider': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        color?: string;
+        thickness?: number;
+        orientation?: 'horizontal' | 'vertical';
+        length?: string;
+        text?: string;
+      }, HTMLElement>;
+
+      'ui-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        name?: string;
+        size?: 'sm' | 'md' | 'lg';
+        color?: string;
+        strokeWidth?: number;
       }, HTMLElement>;
     }
   }

@@ -145,7 +145,7 @@ export const PublishButton: React.FC = () => {
     <Button
       onClick={handlePublish}
       disabled={placedComponents.length === 0}
-      className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600"
+      className={`p-2 rounded bg-blue-50 text-blue-600}`}
     >
       <Upload className="w-4 h-4 mr-2" />
       Publish Website

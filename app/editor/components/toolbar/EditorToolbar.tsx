@@ -1,6 +1,7 @@
 import React from 'react';
 import { Undo, Redo, Grid, Smartphone, Monitor } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
+import { PublishButton } from './PublishButton';
 
 export const EditorToolbar: React.FC = () => {
   const { view, setView, showGrid, setShowGrid } = useEditor();
@@ -23,7 +24,9 @@ export const EditorToolbar: React.FC = () => {
           <Grid size={20} />
         </button>
       </div>
-
+      <div className="flex items-center">
+        <PublishButton />
+      </div>
       <div className="flex items-center space-x-2">
         <button
           className={`p-2 rounded ${view === 'desktop' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}

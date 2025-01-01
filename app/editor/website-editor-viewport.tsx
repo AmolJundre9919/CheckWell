@@ -30,7 +30,7 @@ const EditorContent: React.FC = () => {
       </div>
 
       <EditorToolbar />
-      <PublishButton />
+      
     </div>
   );
 };
