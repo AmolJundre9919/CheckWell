@@ -78,6 +78,29 @@ declare global {
         logoSrc?: string;
         logoAlt?: string;
       }, HTMLElement>;
+
+      'ui-grid': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        columns?: '1' | '2' | '3' | '4' | '6' | '12';
+        gap?: 'none' | 'sm' | 'md' | 'lg';
+      }, HTMLElement>;
+
+      'ui-container': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+        padding?: 'none' | 'sm' | 'md' | 'lg';
+      'ui-divider': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        color?: string;
+        thickness?: number;
+        orientation?: 'horizontal' | 'vertical';
+        length?: string;
+        text?: string;
+      }, HTMLElement>;
+
+      'ui-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        name?: string;
+        size?: 'sm' | 'md' | 'lg';
+        color?: string;
+        strokeWidth?: number;
+      }, HTMLElement>;
     }
   }
 }
@@ -92,6 +115,8 @@ declare module 'app/site/Components' {
   export * from './molecules/SearchBarMolecule';
   export * from './molecules/HeaderMolecule';
   export * from './atoms/display/LogoAtom';
+  export * from './atoms/layout/ContainerAtom';
+  export * from './atoms/layout/GridAtom';
 }
 
 export {}; 
