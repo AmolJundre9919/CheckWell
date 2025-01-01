@@ -70,7 +70,15 @@ const getDefaultProps = (name: string): Record<string, any> => {
     NavigationLink: { href: '#', text: 'Link', active: false },
     Grid: { columns: '12', gap: 'md' },
     Container: { size: 'lg', padding: 'md' },
-    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' }
+    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' },
+    Image: {
+      src: 'https://via.placeholder.com/300x200',
+      alt: 'Placeholder image',
+      size: 'medium',
+      border: 'none',
+      width: 300,
+      height: 200
+    }
   };
   return defaults[name] || {};
 };
@@ -90,7 +98,8 @@ const getEditableProps = (name: string): string[] => {
     NavigationLink: ['href', 'text', 'active'],
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
-    Divider: ['color', 'thickness', 'orientation', 'length']
+    Divider: ['color', 'thickness', 'orientation', 'length'],
+    Image: ['src', 'alt', 'size', 'border', 'width', 'height']
   };
   return editableProps[name] || [];
 };
@@ -123,4 +132,72 @@ export const getComponentsByCategory = (category: ComponentCategory) => {
 
 export const getComponentByName = (name: string) => {
   return componentRegistry.find(comp => comp.name === name);
+};
+
+// Add property definitions for the settings panel
+export const getPropertyDefinitions = (componentName: string): PropertyDefinition[] => {
+  const definitions: Record<string, PropertyDefinition[]> = {
+    Image: [
+      {
+        name: 'src',
+        type: 'string',
+        label: 'Image URL',
+        defaultValue: 'https://via.placeholder.com/300x200',
+        required: true,
+        control: 'text'
+      },
+      {
+        name: 'alt',
+        type: 'string',
+        label: 'Alt Text',
+        defaultValue: 'Placeholder image',
+        required: true,
+        control: 'text'
+      },
+      {
+        name: 'size',
+        type: 'string',
+        label: 'Size',
+        defaultValue: 'medium',
+        control: 'select',
+        options: [
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' }
+        ]
+      },
+      {
+        name: 'border',
+        type: 'string',
+        label: 'Border Style',
+        defaultValue: 'none',
+        control: 'select',
+        options: [
+          { label: 'None', value: 'none' },
+          { label: 'Rounded', value: 'rounded' },
+          { label: 'Circle', value: 'circle' }
+        ]
+      },
+      {
+        name: 'width',
+        type: 'number',
+        label: 'Width (px)',
+        defaultValue: 300,
+        control: 'number',
+        min: 0,
+        max: 1920
+      },
+      {
+        name: 'height',
+        type: 'number',
+        label: 'Height (px)',
+        defaultValue: 200,
+        control: 'number',
+        min: 0,
+        max: 1080
+      }
+    ]
+  };
+
+  return definitions[componentName] || [];
 }; 
