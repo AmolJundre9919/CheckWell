@@ -1,32 +1,12 @@
 import React from 'react';
 import { ComponentCategory } from '../types/editor.types';
+import { Image } from 'lucide-react';
 
 // Update to create a wrapper that renders the custom element directly
 const createUIComponent = (tag: string): React.ComponentType<any> => {
   return React.forwardRef((props: any, ref) => {
     const { children, text, ...rest } = props;
-    const element = document.createElement(tag);
-    
-    // Set properties
-    Object.entries(rest).forEach(([key, value]) => {
-      element.setAttribute(key, String(value));
-    });
-
-    // Handle text content
-    if (text) {
-      element.textContent = text;
-    }
-
-    // Handle children
-    if (children) {
-      if (typeof children === 'string') {
-        element.textContent = children;
-      } else {
-        element.appendChild(children);
-      }
-    }
-
-    return element;
+    return React.createElement(tag, { ...rest, ref }, children || text);
   });
 };
 
@@ -35,7 +15,7 @@ export interface ComponentDefinition {
   type: ComponentCategory;
   name: string;
   tagName: string;
-  icon: string;
+  icon: React.ReactNode;
   defaultProps: Record<string, any>;
   editableProps: string[];
 }
@@ -48,14 +28,14 @@ const createComponentDefinition = (
 ): ComponentDefinition => ({
   type: category,
   name,
-  tagName,  // Store the tag name instead of component
+  tagName,
   icon: getComponentIcon(name),
   defaultProps: getDefaultProps(name),
   editableProps: getEditableProps(name)
 });
 
-const getComponentIcon = (name: string): string => {
-  const icons: Record<string, string> = {
+const getComponentIcon = (name: string): React.ReactNode => {
+  const icons: Record<string, React.ReactNode> = {
     Button: '🔘',
     Input: '📝',
     Badge: '🏷️',
@@ -69,7 +49,8 @@ const getComponentIcon = (name: string): string => {
     NavigationLink: '🔗',
     Grid: '📏',
     Container: '📦',
-    Divider: '➖'
+    Divider: '➖',
+    Image: React.createElement(Image)
   };
   return icons[name] || '📦';
 };
@@ -128,6 +109,7 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('NavigationLink', 'atoms', 'ui-nav-link'),
   createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
+  createComponentDefinition('Image', 'atoms', 'ui-image'),
 
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),
@@ -135,7 +117,7 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Header', 'molecules', 'ui-header')
 ];
 
-export const getComponentsByCategory = (category: 'atoms' | 'molecules' | 'organisms') => {
+export const getComponentsByCategory = (category: ComponentCategory) => {
   return componentRegistry.filter(comp => comp.type === category);
 };
 

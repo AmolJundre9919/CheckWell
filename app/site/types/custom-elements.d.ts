@@ -101,7 +101,16 @@ declare global {
         color?: string;
         strokeWidth?: number;
       }, HTMLElement>;
-    }
+
+      'ui-image': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        src: string;
+        alt: string;
+        size?: 'small' | 'medium' | 'large';
+        border?: 'none' | 'rounded' | 'circle';
+        width?: number;
+        height?: number;
+      }, HTMLElement>;
+    }>
   }
 }
 
@@ -118,5 +127,5 @@ declare module 'app/site/Components' {
   export * from './atoms/layout/ContainerAtom';
   export * from './atoms/layout/GridAtom';
 }
-
+}
 export {}; 
