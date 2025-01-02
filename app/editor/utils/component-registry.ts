@@ -1,32 +1,22 @@
 import React from 'react';
 import { ComponentCategory } from '../types/editor.types';
+import { defaultTheme } from '../../site/theme/theme';
 
-// Update to create a wrapper that renders the custom element directly
+// Update to create a wrapper that renders the custom element using React
 const createUIComponent = (tag: string): React.ComponentType<any> => {
   return React.forwardRef((props: any, ref) => {
     const { children, text, ...rest } = props;
-    const element = document.createElement(tag);
-    
-    // Set properties
-    Object.entries(rest).forEach(([key, value]) => {
-      element.setAttribute(key, String(value));
-    });
 
-    // Handle text content
-    if (text) {
-      element.textContent = text;
-    }
+    // Create props object for the custom element
+    const elementProps = {
+      ref,
+      ...rest,
+      // Handle children/text content
+      children: children || text
+    };
 
-    // Handle children
-    if (children) {
-      if (typeof children === 'string') {
-        element.textContent = children;
-      } else {
-        element.appendChild(children);
-      }
-    }
-
-    return element;
+    // Return JSX using the custom element tag
+    return React.createElement(tag, elementProps);
   });
 };
 
@@ -69,13 +59,18 @@ const getComponentIcon = (name: string): string => {
     NavigationLink: '🔗',
     Grid: '📏',
     Container: '📦',
-    Divider: '➖'
+    Divider: '➖',
+    Icon: '🎨',
+    Spinner: '🔄',
+    Checkbox: '☑️',
+    Switch: '🔘',
   };
   return icons[name] || '📦';
 };
 
 const getDefaultProps = (name: string): Record<string, any> => {
   const defaults: Record<string, Record<string, any>> = {
+    Icon: { name: '🎨', size: 'medium' },
     Button: { variant: 'primary', text: 'Button' },
     Input: { placeholder: 'Enter text...' },
     Badge: { variant: 'default', text: 'Badge' },
@@ -89,13 +84,26 @@ const getDefaultProps = (name: string): Record<string, any> => {
     NavigationLink: { href: '#', text: 'Link', active: false },
     Grid: { columns: '12', gap: 'md' },
     Container: { size: 'lg', padding: 'md' },
-    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' }
+    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' },
+    Spinner: { 
+      size: 'medium',
+      variant: 'circle'
+    },
+    Checkbox: { 
+      label: 'Checkbox',
+      checked: false
+    },
+    Switch: { 
+      label: 'Switch',
+      checked: false
+    },
   };
   return defaults[name] || {};
 };
 
 const getEditableProps = (name: string): string[] => {
   const editableProps: Record<string, string[]> = {
+    Icon: ['name', 'size', 'color'],
     Button: ['variant', 'text', 'disabled'],
     Input: ['placeholder', 'type', 'disabled', 'label', 'required'],
     Badge: ['variant', 'text'],
@@ -109,7 +117,10 @@ const getEditableProps = (name: string): string[] => {
     NavigationLink: ['href', 'text', 'active'],
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
-    Divider: ['color', 'thickness', 'orientation', 'length']
+    Divider: ['color', 'thickness', 'orientation', 'length'],
+    Spinner: ['size', 'variant'],
+    Checkbox: ['label', 'checked'],
+    Switch: ['label', 'checked'],
   };
   return editableProps[name] || [];
 };
@@ -119,6 +130,8 @@ export const componentRegistry: ComponentDefinition[] = [
   // Atoms
   createComponentDefinition('Button', 'atoms', 'ui-button'),
   createComponentDefinition('Input', 'atoms', 'ui-input'),
+  createComponentDefinition('Checkbox', 'atoms', 'ui-checkbox'),
+  createComponentDefinition('Switch', 'atoms', 'ui-switch'),
   createComponentDefinition('Badge', 'atoms', 'ui-badge'),
   createComponentDefinition('Avatar', 'atoms', 'ui-avatar'),
   createComponentDefinition('Typography', 'atoms', 'ui-typography'),
@@ -128,6 +141,8 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('NavigationLink', 'atoms', 'ui-nav-link'),
   createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
+  createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
+  createComponentDefinition('Icon', 'atoms', 'ui-icon'),
 
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),

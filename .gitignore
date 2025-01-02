@@ -131,3 +131,4 @@ dist
 
 # Public directory
 public/sites/
+.codegpt
