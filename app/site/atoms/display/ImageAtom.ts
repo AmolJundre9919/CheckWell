@@ -1,4 +1,3 @@
-import { Theme, defaultTheme } from "../../theme/theme";
 import { BaseComponent } from "../../BaseComponent";
 
 type ImageSize = 'small' | 'medium' | 'large';
@@ -20,7 +19,6 @@ export class ImageAtom extends BaseComponent implements ImageProps {
   border: ImageBorder = 'none';
   width?: number;
   height?: number;
-  protected theme: Theme = defaultTheme;
 
   static get observedAttributes(): string[] {
     return ['src', 'alt', 'size', 'border', 'width', 'height'];
@@ -32,54 +30,19 @@ export class ImageAtom extends BaseComponent implements ImageProps {
       :host {
         display: block;
       }
-
-      .image-container {
-        display: inline-block;
-        overflow: hidden;
-      }
-
-      .image {
-        max-width: 100%;
-        height: auto;
-        display: block;
-      }
-
-      /* Sizes */
-      .small { max-width: 200px; }
-      .medium { max-width: 400px; }
-      .large { max-width: 800px; }
-
-      /* Borders */
-      .rounded { border-radius: ${this.theme.borderRadius.md}; }
-      .circle { border-radius: 50%; }
-
-      /* Loading and Error States */
-      .image.loading {
-        background-color: ${this.theme.colors.muted};
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0% { opacity: 0.6; }
-        50% { opacity: 1; }
-        100% { opacity: 0.6; }
-      }
     `);
   }
 
   protected render(): void {
-    const style = `
-      ${this.width ? `width: ${this.width}px;` : ''}
-      ${this.height ? `height: ${this.height}px;` : ''}
-    `;
+    const sizeClass = this.size === 'small' ? 'max-w-xs' : this.size === 'large' ? 'max-w-lg' : 'max-w-md';
+    const borderClass = this.border === 'rounded' ? 'rounded-lg' : this.border === 'circle' ? 'rounded-full' : '';
 
     this._shadowRoot.innerHTML = `
-      <div class="image-container ${this.border}">
+      <div class="image-container ${borderClass} overflow-hidden">
         <img 
-          class="image ${this.size}"
+          class="image ${sizeClass} w-full h-auto"
           src="${this.src}"
           alt="${this.alt}"
-          style="${style}"
           loading="lazy"
         />
       </div>

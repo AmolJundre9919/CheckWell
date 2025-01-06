@@ -1,6 +1,8 @@
 import React from 'react';
-import { ComponentCategory } from '../types/editor.types';
+import { ComponentCategory, PropertyDefinition } from '../types/editor.types';
 import { Image } from 'lucide-react';
+import { PlacedComponent } from '../types/editor.types';
+import {GoogleMapAtom} from '@/app/site/atoms/display/GoogleMapAtom';
 
 // Update to create a wrapper that renders the custom element directly
 const createUIComponent = (tag: string): React.ComponentType<any> => {
@@ -119,6 +121,7 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
   createComponentDefinition('Image', 'atoms', 'ui-image'),
+  createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
 
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),
@@ -196,6 +199,38 @@ export const getPropertyDefinitions = (componentName: string): PropertyDefinitio
         min: 0,
         max: 1080
       }
+    ],
+    GoogleMap: [
+      {
+        name: 'lat',
+        type: 'number',
+        label: 'Latitude',
+        defaultValue: 0,
+        required: true,
+        control: 'number',
+        min: -90,
+        max: 90,
+      },
+      {
+        name: 'lng',
+        type: 'number',
+        label: 'Longitude',
+        defaultValue: 0,
+        required: true,
+        control: 'number',
+        min: -180,
+        max: 180,
+      },
+      {
+        name: 'zoom',
+        type: 'number',
+        label: 'Zoom Level',
+        defaultValue: 1,
+        required: true,
+        control: 'number',
+        min: 1,
+        max: 20,
+      },
     ]
   };
 
