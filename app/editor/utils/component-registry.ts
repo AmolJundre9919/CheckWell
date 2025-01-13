@@ -3,8 +3,9 @@ import { ComponentCategory, PropertyDefinition } from '../types/editor.types';
 import { Image } from 'lucide-react';
 import { PlacedComponent } from '../types/editor.types';
 import {GoogleMapAtom} from '@/app/site/atoms/display/GoogleMapAtom';
+import { defaultTheme } from '../../site/theme/theme';
 
-// Update to create a wrapper that renders the custom element directly
+// Update to create a wrapper that renders the custom element using React
 const createUIComponent = (tag: string): React.ComponentType<any> => {
   return React.forwardRef((props: any, ref) => {
     const { children, text, ...rest } = props;
@@ -53,12 +54,17 @@ const getComponentIcon = (name: string): React.ReactNode => {
     Container: '📦',
     Divider: '➖',
     Image: React.createElement(Image)
+    Icon: '🎨',
+    Spinner: '🔄',
+    Checkbox: '☑️',
+    Switch: '🔘',
   };
   return icons[name] || '📦';
 };
 
 const getDefaultProps = (name: string): Record<string, any> => {
   const defaults: Record<string, Record<string, any>> = {
+    Icon: { name: '🎨', size: 'medium' },
     Button: { variant: 'primary', text: 'Button' },
     Input: { placeholder: 'Enter text...' },
     Badge: { variant: 'default', text: 'Badge' },
@@ -81,12 +87,25 @@ const getDefaultProps = (name: string): Record<string, any> => {
       width: 300,
       height: 200
     }
+    Spinner: { 
+      size: 'medium',
+      variant: 'circle'
+    },
+    Checkbox: { 
+      label: 'Checkbox',
+      checked: false
+    },
+    Switch: { 
+      label: 'Switch',
+      checked: false
+    },
   };
   return defaults[name] || {};
 };
 
 const getEditableProps = (name: string): string[] => {
   const editableProps: Record<string, string[]> = {
+    Icon: ['name', 'size', 'color'],
     Button: ['variant', 'text', 'disabled'],
     Input: ['placeholder', 'type', 'disabled', 'label', 'required'],
     Badge: ['variant', 'text'],
@@ -102,6 +121,9 @@ const getEditableProps = (name: string): string[] => {
     Container: ['size', 'padding'],
     Divider: ['color', 'thickness', 'orientation', 'length'],
     Image: ['src', 'alt', 'size', 'border', 'width', 'height']
+    Spinner: ['size', 'variant'],
+    Checkbox: ['label', 'checked'],
+    Switch: ['label', 'checked'],
   };
   return editableProps[name] || [];
 };
@@ -111,6 +133,8 @@ export const componentRegistry: ComponentDefinition[] = [
   // Atoms
   createComponentDefinition('Button', 'atoms', 'ui-button'),
   createComponentDefinition('Input', 'atoms', 'ui-input'),
+  createComponentDefinition('Checkbox', 'atoms', 'ui-checkbox'),
+  createComponentDefinition('Switch', 'atoms', 'ui-switch'),
   createComponentDefinition('Badge', 'atoms', 'ui-badge'),
   createComponentDefinition('Avatar', 'atoms', 'ui-avatar'),
   createComponentDefinition('Typography', 'atoms', 'ui-typography'),
@@ -122,6 +146,8 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
   createComponentDefinition('Image', 'atoms', 'ui-image'),
   createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
+  createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
+  createComponentDefinition('Icon', 'atoms', 'ui-icon'),
 
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),
