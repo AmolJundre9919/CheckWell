@@ -1,6 +1,9 @@
 import React from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { CollapsiblePanel } from './CollapsiblePanel';
+import { PlacedComponent } from '@/app/editor/types/editor.types';
+import {GoogleMapAtom} from '@/app/site/atoms/display/GoogleMapAtom';
+
 
 export const SettingsPanel: React.FC = () => {
   const { selectedComponent, placedComponents, setPlacedComponents } = useEditor();
@@ -12,13 +15,20 @@ export const SettingsPanel: React.FC = () => {
   const updateComponentProp = (propName: string, value: any) => {
     if (!selectedComponent) return;
 
-    setPlacedComponents((prev) =>
-      prev.map((component) =>
-        component.id === selectedComponent
-          ? { ...component, props: { ...component.props, [propName]: value } }
-          : component
-      )
-    );
+    setPlacedComponents((prev: PlacedComponent[]) => {
+      return prev.map((component: PlacedComponent) => {
+        if (component.id === selectedComponent) {
+          return { 
+            ...component, 
+            props: { 
+              ...component.props, 
+              [propName]: value 
+            } 
+          } as PlacedComponent;
+        }
+        return component;
+      });
+    });
   };
 
   if (!selectedComponentData) {
@@ -44,6 +54,38 @@ export const SettingsPanel: React.FC = () => {
           </div>
         ))}
       </CollapsiblePanel>
+
+      {selectedComponentData.name === 'GoogleMap' && (
+        <CollapsiblePanel title="Google Map Properties">
+          <div>
+            <label className="block text-sm font-medium mb-1">Latitude</label>
+            <input
+              type="number"
+              value={selectedComponentData.props.lat}
+              onChange={(e) => updateComponentProp('lat', parseFloat(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Longitude</label>
+            <input
+              type="number"
+              value={selectedComponentData.props.lng}
+              onChange={(e) => updateComponentProp('lng', parseFloat(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Zoom Level</label>
+            <input
+              type="number"
+              value={selectedComponentData.props.zoom}
+              onChange={(e) => updateComponentProp('zoom', parseInt(e.target.value))}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        </CollapsiblePanel>
+      )}
 
       <CollapsiblePanel title="Layout">
         <div className="space-y-4">
@@ -79,4 +121,20 @@ export const SettingsPanel: React.FC = () => {
       </CollapsiblePanel>
     </div>
   );
-}; 
+};
+
+// Add this JavaScript snippet to handle property updates
+document.getElementById('update-google-map')?.addEventListener('click', () => {
+    const latInput = document.getElementById('map-lat') as HTMLInputElement | null;
+    const lngInput = document.getElementById('map-lng') as HTMLInputElement | null;
+
+    if (latInput && lngInput) {
+        const lat = parseFloat(latInput.value);
+        const lng = parseFloat(lngInput.value);
+        
+        const googleMapElement = document.querySelector('ui-google-map') as GoogleMap; // Cast to your GoogleMap class
+        if (googleMapElement) {
+            googleMapElement.updateCenter(lat, lng);
+        }
+    }
+}); 

@@ -14,12 +14,18 @@ export interface ComponentSize {
 }
 
 export interface PlacedComponent {
-  type: string;
-  name: string;
-  position: ComponentPosition;
-  size: ComponentSize;
   id: string;
+  name: string;
+  type: string;
   props: Record<string, any>;
+  position: {
+    x: number;
+    y: number;
+  };
+  size: {
+    width: number;
+    height: number;
+  };
   children?: PlacedComponent[];
 }
 
@@ -30,4 +36,16 @@ export interface ComponentDefinition {
   icon: string;
   defaultProps: Record<string, any>;
   editableProps: string[];
+}
+
+export interface PropertyDefinition {
+  name: string;
+  type: string;
+  label: string;
+  defaultValue: any;
+  required?: boolean;
+  control?: string;
+  options?: { label: string; value: string }[];
+  min?: number;
+  max?: number;
 } 

@@ -1,22 +1,15 @@
 import React from 'react';
-import { ComponentCategory } from '../types/editor.types';
+import { ComponentCategory, PropertyDefinition } from '../types/editor.types';
+import { Image } from 'lucide-react';
+import { PlacedComponent } from '../types/editor.types';
+import {GoogleMapAtom} from '@/app/site/atoms/display/GoogleMapAtom';
 import { defaultTheme } from '../../site/theme/theme';
 
 // Update to create a wrapper that renders the custom element using React
 const createUIComponent = (tag: string): React.ComponentType<any> => {
   return React.forwardRef((props: any, ref) => {
     const { children, text, ...rest } = props;
-
-    // Create props object for the custom element
-    const elementProps = {
-      ref,
-      ...rest,
-      // Handle children/text content
-      children: children || text
-    };
-
-    // Return JSX using the custom element tag
-    return React.createElement(tag, elementProps);
+    return React.createElement(tag, { ...rest, ref }, children || text);
   });
 };
 
@@ -25,7 +18,7 @@ export interface ComponentDefinition {
   type: ComponentCategory;
   name: string;
   tagName: string;
-  icon: string;
+  icon: React.ReactNode;
   defaultProps: Record<string, any>;
   editableProps: string[];
 }
@@ -38,14 +31,14 @@ const createComponentDefinition = (
 ): ComponentDefinition => ({
   type: category,
   name,
-  tagName,  // Store the tag name instead of component
+  tagName,
   icon: getComponentIcon(name),
   defaultProps: getDefaultProps(name),
   editableProps: getEditableProps(name)
 });
 
-const getComponentIcon = (name: string): string => {
-  const icons: Record<string, string> = {
+const getComponentIcon = (name: string): React.ReactNode => {
+  const icons: Record<string, React.ReactNode> = {
     Button: '🔘',
     Input: '📝',
     Badge: '🏷️',
@@ -60,6 +53,7 @@ const getComponentIcon = (name: string): string => {
     Grid: '📏',
     Container: '📦',
     Divider: '➖',
+    Image: React.createElement(Image)
     Icon: '🎨',
     Spinner: '🔄',
     Checkbox: '☑️',
@@ -85,6 +79,14 @@ const getDefaultProps = (name: string): Record<string, any> => {
     Grid: { columns: '12', gap: 'md' },
     Container: { size: 'lg', padding: 'md' },
     Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' },
+    Image: {
+      src: 'https://via.placeholder.com/300x200',
+      alt: 'Placeholder image',
+      size: 'medium',
+      border: 'none',
+      width: 300,
+      height: 200
+    }
     Spinner: { 
       size: 'medium',
       variant: 'circle'
@@ -118,6 +120,7 @@ const getEditableProps = (name: string): string[] => {
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
     Divider: ['color', 'thickness', 'orientation', 'length'],
+    Image: ['src', 'alt', 'size', 'border', 'width', 'height']
     Spinner: ['size', 'variant'],
     Checkbox: ['label', 'checked'],
     Switch: ['label', 'checked'],
@@ -141,6 +144,8 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('NavigationLink', 'atoms', 'ui-nav-link'),
   createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
+  createComponentDefinition('Image', 'atoms', 'ui-image'),
+  createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
   createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
   createComponentDefinition('Icon', 'atoms', 'ui-icon'),
 
@@ -150,10 +155,110 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Header', 'molecules', 'ui-header')
 ];
 
-export const getComponentsByCategory = (category: 'atoms' | 'molecules' | 'organisms') => {
+export const getComponentsByCategory = (category: ComponentCategory) => {
   return componentRegistry.filter(comp => comp.type === category);
 };
 
 export const getComponentByName = (name: string) => {
   return componentRegistry.find(comp => comp.name === name);
+};
+
+// Add property definitions for the settings panel
+export const getPropertyDefinitions = (componentName: string): PropertyDefinition[] => {
+  const definitions: Record<string, PropertyDefinition[]> = {
+    Image: [
+      {
+        name: 'src',
+        type: 'string',
+        label: 'Image URL',
+        defaultValue: 'https://via.placeholder.com/300x200',
+        required: true,
+        control: 'text'
+      },
+      {
+        name: 'alt',
+        type: 'string',
+        label: 'Alt Text',
+        defaultValue: 'Placeholder image',
+        required: true,
+        control: 'text'
+      },
+      {
+        name: 'size',
+        type: 'string',
+        label: 'Size',
+        defaultValue: 'medium',
+        control: 'select',
+        options: [
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' }
+        ]
+      },
+      {
+        name: 'border',
+        type: 'string',
+        label: 'Border Style',
+        defaultValue: 'none',
+        control: 'select',
+        options: [
+          { label: 'None', value: 'none' },
+          { label: 'Rounded', value: 'rounded' },
+          { label: 'Circle', value: 'circle' }
+        ]
+      },
+      {
+        name: 'width',
+        type: 'number',
+        label: 'Width (px)',
+        defaultValue: 300,
+        control: 'number',
+        min: 0,
+        max: 1920
+      },
+      {
+        name: 'height',
+        type: 'number',
+        label: 'Height (px)',
+        defaultValue: 200,
+        control: 'number',
+        min: 0,
+        max: 1080
+      }
+    ],
+    GoogleMap: [
+      {
+        name: 'lat',
+        type: 'number',
+        label: 'Latitude',
+        defaultValue: 0,
+        required: true,
+        control: 'number',
+        min: -90,
+        max: 90,
+      },
+      {
+        name: 'lng',
+        type: 'number',
+        label: 'Longitude',
+        defaultValue: 0,
+        required: true,
+        control: 'number',
+        min: -180,
+        max: 180,
+      },
+      {
+        name: 'zoom',
+        type: 'number',
+        label: 'Zoom Level',
+        defaultValue: 1,
+        required: true,
+        control: 'number',
+        min: 1,
+        max: 20,
+      },
+    ]
+  };
+
+  return definitions[componentName] || [];
 }; 
