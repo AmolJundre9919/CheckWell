@@ -53,7 +53,7 @@ const getComponentIcon = (name: string): React.ReactNode => {
     Grid: '📏',
     Container: '📦',
     Divider: '➖',
-    Image: React.createElement(Image)
+    Image: React.createElement(Image),
     Icon: '🎨',
     Spinner: '🔄',
     Checkbox: '☑️',
@@ -86,7 +86,7 @@ const getDefaultProps = (name: string): Record<string, any> => {
       border: 'none',
       width: 300,
       height: 200
-    }
+    },
     Spinner: { 
       size: 'medium',
       variant: 'circle'
@@ -120,7 +120,7 @@ const getEditableProps = (name: string): string[] => {
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
     Divider: ['color', 'thickness', 'orientation', 'length'],
-    Image: ['src', 'alt', 'size', 'border', 'width', 'height']
+    Image: ['src', 'alt', 'size', 'border', 'width', 'height'],
     Spinner: ['size', 'variant'],
     Checkbox: ['label', 'checked'],
     Switch: ['label', 'checked'],
