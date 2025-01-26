@@ -1,5 +1,8 @@
 export interface ThemeColors {
-  primary: string;
+  primary: {
+    main: string;
+    contrastText: string;
+  };
   secondary: string;
   accent: string;
   background: string;
@@ -46,7 +49,10 @@ export interface Theme {
 
 export const defaultTheme: Theme = {
   colors: {
-    primary: '#0066ff',
+    primary: {
+      main: '#007bff',
+      contrastText: '#ffffff'
+    },
     secondary: '#e5e7eb',
     accent: '#6366f1',
     background: '#ffffff',
