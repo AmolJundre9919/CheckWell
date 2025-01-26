@@ -10,6 +10,10 @@ export interface ThemeColors {
   success: string;
   border: string;
   muted: string;
+  default: {
+    main: string;
+    contrastText: string;
+  };
 }
 
 export interface ThemeSpacing {
@@ -21,6 +25,7 @@ export interface ThemeSpacing {
 }
 
 export interface ThemeTypography {
+  fontFamily: any;
   xs: string;
   sm: string;
   base: string;
@@ -51,7 +56,11 @@ export const defaultTheme: Theme = {
     warning: '#fbbf24',
     success: '#10b981',
     border: '#e2e8f0',
-    muted: '#f0f0f0'
+    muted: '#f0f0f0',
+    default: {
+      main: '#000000',
+      contrastText: '#ffffff'
+    }
   },
   spacing: {
     xs: '0.5rem',
@@ -61,6 +70,7 @@ export const defaultTheme: Theme = {
     xl: '2rem'
   },
   typography: {
+    fontFamily: 'system-ui, sans-serif',
     xs: '0.75rem',
     sm: '0.875rem',
     base: '1rem',

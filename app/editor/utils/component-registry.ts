@@ -53,11 +53,16 @@ const getComponentIcon = (name: string): React.ReactNode => {
     Grid: '📏',
     Container: '📦',
     Divider: '➖',
-    Image: React.createElement(Image)
+    Image: React.createElement(Image),
     Icon: '🎨',
     Spinner: '🔄',
     Checkbox: '☑️',
     Switch: '🔘',
+    Chip: '🏷️',
+    Counter: '🔢',
+    BasicGallery: '🖼️',
+    Alert: '🔔',
+    ReadMore: '📖',
   };
   return icons[name] || '📦';
 };
@@ -86,7 +91,7 @@ const getDefaultProps = (name: string): Record<string, any> => {
       border: 'none',
       width: 300,
       height: 200
-    }
+    },
     Spinner: { 
       size: 'medium',
       variant: 'circle'
@@ -98,6 +103,47 @@ const getDefaultProps = (name: string): Record<string, any> => {
     Switch: { 
       label: 'Switch',
       checked: false
+    },
+    Chip: {
+      label: 'Chip Label',
+      icon: '🔵',
+      variant: 'default',
+      size: 'medium'
+    },
+    Counter: {
+      value: 0,
+      min: 0,
+      max: 100,
+      step: 1,
+      label: 'Counter',
+      variant: 'default',
+      size: 'medium'
+    },
+    BasicGallery: {
+      images: JSON.stringify([
+        'https://via.placeholder.com/400x300/FF5733/FFFFFF',
+        'https://via.placeholder.com/400x300/33FF57/FFFFFF',
+        'https://via.placeholder.com/400x300/5733FF/FFFFFF'
+      ]),
+      columns: 3,
+      gap: 16,
+      imageHeight: 200,
+      borderRadius: 8,
+      title: 'Image Gallery'
+    },
+    Alert: {
+      message: 'This is an alert message',
+      type: 'info',
+      title: 'Alert Title',
+      dismissible: true,
+      icon: ''
+    },
+    ReadMore: {
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      maxLength: 150,
+      expandText: 'Read More',
+      collapseText: 'Show Less',
+      expanded: false
     },
   };
   return defaults[name] || {};
@@ -120,10 +166,15 @@ const getEditableProps = (name: string): string[] => {
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
     Divider: ['color', 'thickness', 'orientation', 'length'],
-    Image: ['src', 'alt', 'size', 'border', 'width', 'height']
+    Image: ['src', 'alt', 'size', 'border', 'width', 'height'],
     Spinner: ['size', 'variant'],
     Checkbox: ['label', 'checked'],
     Switch: ['label', 'checked'],
+    Chip: ['label', 'icon', 'variant', 'size'],
+    Counter: ['value', 'min', 'max', 'step', 'label', 'variant', 'size'],
+    BasicGallery: ['images', 'columns', 'gap', 'image-height', 'border-radius', 'title'],
+    Alert: ['message', 'type', 'title', 'dismissible', 'icon'],
+    ReadMore: ['content', 'max-length', 'expand-text', 'collapse-text', 'expanded'],
   };
   return editableProps[name] || [];
 };
@@ -152,7 +203,12 @@ export const componentRegistry: ComponentDefinition[] = [
   // Molecules
   createComponentDefinition('Card', 'molecules', 'ui-card'),
   createComponentDefinition('SearchBar', 'molecules', 'ui-search-bar'),
-  createComponentDefinition('Header', 'molecules', 'ui-header')
+  createComponentDefinition('Header', 'molecules', 'ui-header'),
+  createComponentDefinition('Chip', 'molecules', 'ui-chip'),
+  createComponentDefinition('Counter', 'molecules', 'ui-counter'),
+  createComponentDefinition('BasicGallery', 'molecules', 'ui-basic-gallery'),
+  createComponentDefinition('Alert', 'molecules', 'ui-alert'),
+  createComponentDefinition('ReadMore', 'molecules', 'ui-read-more'),
 ];
 
 export const getComponentsByCategory = (category: ComponentCategory) => {
@@ -257,7 +313,252 @@ export const getPropertyDefinitions = (componentName: string): PropertyDefinitio
         min: 1,
         max: 20,
       },
-    ]
+    ],
+    Chip: [
+      {
+        name: 'label',
+        type: 'string',
+        label: 'Label',
+        defaultValue: 'Chip Label',
+        required: true,
+        control: 'text'
+      },
+      {
+        name: 'icon',
+        type: 'string',
+        label: 'Icon',
+        defaultValue: '🔵',
+        control: 'text'
+      },
+      {
+        name: 'variant',
+        type: 'string',
+        label: 'Variant',
+        defaultValue: 'default',
+        control: 'select',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' },
+          { label: 'Error', value: 'error' }
+        ]
+      },
+      {
+        name: 'size',
+        type: 'string',
+        label: 'Size',
+        defaultValue: 'medium',
+        control: 'select',
+        options: [
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' }
+        ]
+      }
+    ],
+    Counter: [
+      {
+        name: 'value',
+        type: 'number',
+        label: 'Value',
+        defaultValue: 0,
+        required: true,
+        control: 'number'
+      },
+      {
+        name: 'min',
+        type: 'number',
+        label: 'Minimum',
+        defaultValue: 0,
+        control: 'number'
+      },
+      {
+        name: 'max',
+        type: 'number',
+        label: 'Maximum',
+        defaultValue: 100,
+        control: 'number'
+      },
+      {
+        name: 'step',
+        type: 'number',
+        label: 'Step',
+        defaultValue: 1,
+        control: 'number'
+      },
+      {
+        name: 'label',
+        type: 'string',
+        label: 'Label',
+        defaultValue: 'Counter',
+        control: 'text'
+      },
+      {
+        name: 'variant',
+        type: 'string',
+        label: 'Variant',
+        defaultValue: 'default',
+        control: 'select',
+        options: [
+          { label: 'Default', value: 'default' },
+          { label: 'Primary', value: 'primary' },
+          { label: 'Secondary', value: 'secondary' }
+        ]
+      },
+      {
+        name: 'size',
+        type: 'string',
+        label: 'Size',
+        defaultValue: 'medium',
+        control: 'select',
+        options: [
+          { label: 'Small', value: 'small' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Large', value: 'large' }
+        ]
+      }
+    ],
+    BasicGallery: [
+      {
+        name: 'images',
+        type: 'string',
+        label: 'Images (JSON array)',
+        defaultValue: JSON.stringify([
+          'https://via.placeholder.com/400x300/FF5733/FFFFFF',
+          'https://via.placeholder.com/400x300/33FF57/FFFFFF',
+          'https://via.placeholder.com/400x300/5733FF/FFFFFF'
+        ]),
+        control: 'textarea',
+        required: true
+      },
+      {
+        name: 'columns',
+        type: 'number',
+        label: 'Columns',
+        defaultValue: 3,
+        control: 'number',
+        min: 1,
+        max: 6
+      },
+      {
+        name: 'gap',
+        type: 'number',
+        label: 'Gap (px)',
+        defaultValue: 16,
+        control: 'number',
+        min: 0,
+        max: 48
+      },
+      {
+        name: 'image-height',
+        type: 'number',
+        label: 'Image Height (px)',
+        defaultValue: 200,
+        control: 'number',
+        min: 100,
+        max: 600
+      },
+      {
+        name: 'border-radius',
+        type: 'number',
+        label: 'Border Radius (px)',
+        defaultValue: 8,
+        control: 'number',
+        min: 0,
+        max: 24
+      },
+      {
+        name: 'title',
+        type: 'string',
+        label: 'Gallery Title',
+        defaultValue: 'Image Gallery',
+        control: 'text'
+      }
+    ],
+    Alert: [
+      {
+        name: 'message',
+        type: 'string',
+        label: 'Message',
+        defaultValue: 'This is an alert message',
+        control: 'textarea',
+        required: true
+      },
+      {
+        name: 'type',
+        type: 'string',
+        label: 'Type',
+        defaultValue: 'info',
+        control: 'select',
+        options: [
+          { label: 'Info', value: 'info' },
+          { label: 'Success', value: 'success' },
+          { label: 'Warning', value: 'warning' },
+          { label: 'Error', value: 'error' }
+        ]
+      },
+      {
+        name: 'title',
+        type: 'string',
+        label: 'Title',
+        defaultValue: 'Alert Title',
+        control: 'text'
+      },
+      {
+        name: 'dismissible',
+        type: 'boolean',
+        label: 'Dismissible',
+        defaultValue: true,
+        control: 'checkbox'
+      },
+      {
+        name: 'icon',
+        type: 'string',
+        label: 'Custom Icon',
+        defaultValue: '',
+        control: 'text'
+      }
+    ],
+    ReadMore: [
+      {
+        name: 'content',
+        type: 'string',
+        label: 'Content',
+        defaultValue: 'Lorem ipsum dolor sit amet...',
+        control: 'textarea',
+        required: true
+      },
+      {
+        name: 'max-length',
+        type: 'number',
+        label: 'Max Length',
+        defaultValue: 150,
+        control: 'number',
+        min: 50,
+        max: 1000
+      },
+      {
+        name: 'expand-text',
+        type: 'string',
+        label: 'Expand Button Text',
+        defaultValue: 'Read More',
+        control: 'text'
+      },
+      {
+        name: 'collapse-text',
+        type: 'string',
+        label: 'Collapse Button Text',
+        defaultValue: 'Show Less',
+        control: 'text'
+      },
+      {
+        name: 'expanded',
+        type: 'boolean',
+        label: 'Initially Expanded',
+        defaultValue: false,
+        control: 'checkbox'
+      }
+    ],
   };
 
   return definitions[componentName] || [];
