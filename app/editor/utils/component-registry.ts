@@ -1,44 +1,18 @@
-import React from 'react';
-import { ComponentCategory, PropertyDefinition } from '../types/editor.types';
-import { Image } from 'lucide-react';
-import { PlacedComponent } from '../types/editor.types';
-import {GoogleMapAtom} from '@/app/site/atoms/display/GoogleMapAtom';
-import { defaultTheme } from '../../site/theme/theme';
+// component-registry.ts
+import { ComponentCategory } from '../types/editor.types';
 
-// Update to create a wrapper that renders the custom element using React
-const createUIComponent = (tag: string): React.ComponentType<any> => {
-  return React.forwardRef((props: any, ref) => {
-    const { children, text, ...rest } = props;
-    return React.createElement(tag, { ...rest, ref }, children || text);
-  });
-};
-
-// Update the ComponentDefinition interface
 export interface ComponentDefinition {
   type: ComponentCategory;
   name: string;
   tagName: string;
-  icon: React.ReactNode;
+  icon: string;
   defaultProps: Record<string, any>;
   editableProps: string[];
-}
+} 
 
-// Convert imported components into component definitions
-const createComponentDefinition = (
-  name: string, 
-  category: ComponentCategory,
-  tagName: string
-): ComponentDefinition => ({
-  type: category,
-  name,
-  tagName,
-  icon: getComponentIcon(name),
-  defaultProps: getDefaultProps(name),
-  editableProps: getEditableProps(name)
-});
-
-const getComponentIcon = (name: string): React.ReactNode => {
-  const icons: Record<string, React.ReactNode> = {
+// Utility function to get the icon for each component by name
+const getComponentIcon = (name: string): string => {
+  const icons: Record<string, string> = {
     Button: '🔘',
     Input: '📝',
     Badge: '🏷️',
@@ -53,18 +27,23 @@ const getComponentIcon = (name: string): React.ReactNode => {
     Grid: '📏',
     Container: '📦',
     Divider: '➖',
-    Image: React.createElement(Image)
+    Image: '🖼️',
     Icon: '🎨',
     Spinner: '🔄',
     Checkbox: '☑️',
     Switch: '🔘',
+    GoogleMap: '🗺️',
+    ImageBox: '🖼️',
+    IconBox: '🔲',
+    ImageCarousel: '📸',
+    Accordion: '📂', // Icon for Accordion
   };
   return icons[name] || '📦';
 };
 
+// Function to get the default properties for each component by name
 const getDefaultProps = (name: string): Record<string, any> => {
   const defaults: Record<string, Record<string, any>> = {
-    Icon: { name: '🎨', size: 'medium' },
     Button: { variant: 'primary', text: 'Button' },
     Input: { placeholder: 'Enter text...' },
     Badge: { variant: 'default', text: 'Badge' },
@@ -75,62 +54,67 @@ const getDefaultProps = (name: string): Record<string, any> => {
     SearchBar: { placeholder: 'Search...' },
     Header: { title: 'Header' },
     Navigation: { icon: '🔗', label: 'Navigation Item' },
-    NavigationLink: { href: '#', text: 'Link', active: false },
+    NavigationLink: { href: '#', text: 'Link' },
     Grid: { columns: '12', gap: 'md' },
     Container: { size: 'lg', padding: 'md' },
-    Divider: { orientation: 'horizontal', thickness: 1, color: '#E5E7EB' },
-    Image: {
-      src: 'https://via.placeholder.com/300x200',
-      alt: 'Placeholder image',
-      size: 'medium',
-      border: 'none',
-      width: 300,
-      height: 200
-    }
-    Spinner: { 
-      size: 'medium',
-      variant: 'circle'
-    },
-    Checkbox: { 
-      label: 'Checkbox',
-      checked: false
-    },
-    Switch: { 
-      label: 'Switch',
-      checked: false
-    },
+    Divider: { orientation: 'horizontal', thickness: 1 },
+    Image: { src: 'https://via.placeholder.com/300x200', alt: 'Placeholder image', size: 'medium' },
+    ImageBox: { src: 'https://via.placeholder.com/400x300', alt: 'Image Box' },
+    IconBox: { icon: '⭐', label: 'Default Label', size: 'medium', shape: 'square', color: '#000', backgroundColor: '#fff', border: 'none', padding: '8px', margin: '0', labelPosition: 'right', labelColor: '#000', labelFontSize: '14px', hoverColor: '#fff', hoverBackgroundColor: '#007bff' },
+    ImageCarousel: { images: [{ src: 'https://via.placeholder.com/400x300', alt: 'Slide 1' }, { src: 'https://via.placeholder.com/400x300', alt: 'Slide 2' }], autoplay: true },
+    Spinner: { size: 'medium' },
+    Checkbox: { label: 'Checkbox' },
+    Switch: { label: 'Switch' },
+    Accordion: { items: [{ title: 'Section 1', content: 'Content for section 1' }, { title: 'Section 2', content: 'Content for section 2' }], multiExpand: false },
   };
   return defaults[name] || {};
 };
 
+// Function to get editable properties for each component by name
 const getEditableProps = (name: string): string[] => {
   const editableProps: Record<string, string[]> = {
-    Icon: ['name', 'size', 'color'],
     Button: ['variant', 'text', 'disabled'],
-    Input: ['placeholder', 'type', 'disabled', 'label', 'required'],
+    Input: ['placeholder', 'type'],
     Badge: ['variant', 'text'],
-    Avatar: ['src', 'alt', 'size', 'initials'],
-    Typography: ['variant', 'text', 'color', 'weight', 'align'],
-    Logo: ['src', 'alt', 'width', 'height'],
-    Card: ['title', 'content', 'variant', 'padding', 'elevation'],
-    SearchBar: ['placeholder', 'variant', 'size', 'disabled', 'clearable'],
-    Header: ['variant', 'sticky', 'logoSrc', 'logoAlt'],
-    Navigation: ['icon', 'label', 'badgeText'],
-    NavigationLink: ['href', 'text', 'active'],
+    Avatar: ['src', 'alt', 'size'],
+    Typography: ['variant', 'text', 'color'],
+    Logo: ['src', 'alt'],
+    Card: ['title', 'content'],
+    SearchBar: ['placeholder', 'variant'],
+    Header: ['variant'],
+    Navigation: ['icon', 'label'],
+    NavigationLink: ['href', 'text'],
     Grid: ['columns', 'gap'],
     Container: ['size', 'padding'],
-    Divider: ['color', 'thickness', 'orientation', 'length'],
-    Image: ['src', 'alt', 'size', 'border', 'width', 'height']
-    Spinner: ['size', 'variant'],
-    Checkbox: ['label', 'checked'],
-    Switch: ['label', 'checked'],
+    Divider: ['color', 'thickness'],
+    Image: ['src', 'alt'],
+    ImageBox: ['src', 'alt'],
+    IconBox: ['icon','label','size','shape','color','backgroundColor','border','padding','margin','labelPosition','labelColor','labelFontSize','hoverColor','hoverBackgroundColor'],
+    ImageCarousel: ['images', 'autoplay'],
+    Spinner: ['size'],
+    Checkbox: ['label'],
+    Switch: ['label'],
+    Accordion: ['items', 'multiExpand'], // Editable properties for Accordion
   };
   return editableProps[name] || [];
 };
 
-// Create the registry of all available components
+// Function to create a component definition
+const createComponentDefinition = (
+  name: string,
+  category: ComponentCategory,
+  tagName: string
+): ComponentDefinition => ({
+  type: category,
+  name,
+  tagName,
+  icon: getComponentIcon(name),
+  defaultProps: getDefaultProps(name),
+  editableProps: getEditableProps(name),
+});
+
+// Create a registry for all available components
 export const componentRegistry: ComponentDefinition[] = [
-  // Atoms
   createComponentDefinition('Button', 'atoms', 'ui-button'),
   createComponentDefinition('Input', 'atoms', 'ui-input'),
   createComponentDefinition('Checkbox', 'atoms', 'ui-checkbox'),
@@ -145,120 +129,24 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Navigation', 'atoms', 'ui-navigation'),
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
   createComponentDefinition('Image', 'atoms', 'ui-image'),
+  createComponentDefinition('ImageBox', 'molecules', 'ui-image-box'),
+  createComponentDefinition('IconBox', 'molecules', 'ui-icon-box'), 
+  createComponentDefinition('ImageCarousel', 'molecules', 'ui-image-carousel'),
   createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
   createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
   createComponentDefinition('Icon', 'atoms', 'ui-icon'),
-
-  // Molecules
+  createComponentDefinition('Accordion', 'molecules', 'ui-accordion'), // Added Accordion
   createComponentDefinition('Card', 'molecules', 'ui-card'),
   createComponentDefinition('SearchBar', 'molecules', 'ui-search-bar'),
-  createComponentDefinition('Header', 'molecules', 'ui-header')
+  createComponentDefinition('Header', 'molecules', 'ui-header'),
 ];
 
-export const getComponentsByCategory = (category: ComponentCategory) => {
-  return componentRegistry.filter(comp => comp.type === category);
+// Function to get a component by its name
+export const getComponentByName = (name: string): ComponentDefinition | null => {
+  return componentRegistry.find((component) => component.name === name) || null;
 };
 
-export const getComponentByName = (name: string) => {
-  return componentRegistry.find(comp => comp.name === name);
+// Function to get components by category
+export const getComponentsByCategory = (category: ComponentCategory): ComponentDefinition[] => {
+  return componentRegistry.filter((component) => component.type === category);
 };
-
-// Add property definitions for the settings panel
-export const getPropertyDefinitions = (componentName: string): PropertyDefinition[] => {
-  const definitions: Record<string, PropertyDefinition[]> = {
-    Image: [
-      {
-        name: 'src',
-        type: 'string',
-        label: 'Image URL',
-        defaultValue: 'https://via.placeholder.com/300x200',
-        required: true,
-        control: 'text'
-      },
-      {
-        name: 'alt',
-        type: 'string',
-        label: 'Alt Text',
-        defaultValue: 'Placeholder image',
-        required: true,
-        control: 'text'
-      },
-      {
-        name: 'size',
-        type: 'string',
-        label: 'Size',
-        defaultValue: 'medium',
-        control: 'select',
-        options: [
-          { label: 'Small', value: 'small' },
-          { label: 'Medium', value: 'medium' },
-          { label: 'Large', value: 'large' }
-        ]
-      },
-      {
-        name: 'border',
-        type: 'string',
-        label: 'Border Style',
-        defaultValue: 'none',
-        control: 'select',
-        options: [
-          { label: 'None', value: 'none' },
-          { label: 'Rounded', value: 'rounded' },
-          { label: 'Circle', value: 'circle' }
-        ]
-      },
-      {
-        name: 'width',
-        type: 'number',
-        label: 'Width (px)',
-        defaultValue: 300,
-        control: 'number',
-        min: 0,
-        max: 1920
-      },
-      {
-        name: 'height',
-        type: 'number',
-        label: 'Height (px)',
-        defaultValue: 200,
-        control: 'number',
-        min: 0,
-        max: 1080
-      }
-    ],
-    GoogleMap: [
-      {
-        name: 'lat',
-        type: 'number',
-        label: 'Latitude',
-        defaultValue: 0,
-        required: true,
-        control: 'number',
-        min: -90,
-        max: 90,
-      },
-      {
-        name: 'lng',
-        type: 'number',
-        label: 'Longitude',
-        defaultValue: 0,
-        required: true,
-        control: 'number',
-        min: -180,
-        max: 180,
-      },
-      {
-        name: 'zoom',
-        type: 'number',
-        label: 'Zoom Level',
-        defaultValue: 1,
-        required: true,
-        control: 'number',
-        min: 1,
-        max: 20,
-      },
-    ]
-  };
-
-  return definitions[componentName] || [];
-}; 

@@ -1,15 +1,15 @@
 import React from 'react';
 import { useEditor } from '../../context/EditorContext';
 import { CollapsiblePanel } from './CollapsiblePanel';
-import { ComponentDefinition } from '../../types/editor.types';
-import { getComponentsByCategory } from '../../utils/component-registry';
+import { ComponentCategory } from '../../types/editor.types';
+import { getComponentsByCategory, ComponentDefinition } from '../../utils/component-registry';
 
 export const ComponentList: React.FC = () => {
   const { setPlacedComponents } = useEditor();
 
-  const atoms = getComponentsByCategory('atoms');
-  const molecules = getComponentsByCategory('molecules');
-  const organisms = getComponentsByCategory('organisms');
+  const atoms = getComponentsByCategory('atoms' as ComponentCategory);
+  const molecules = getComponentsByCategory('molecules' as ComponentCategory);
+  const organisms = getComponentsByCategory('organisms' as ComponentCategory);
 
   const handleDragStart = (component: ComponentDefinition) => (e: React.DragEvent) => {
     e.dataTransfer.setData('component', JSON.stringify(component));
@@ -40,4 +40,5 @@ export const ComponentList: React.FC = () => {
       {organisms.length > 0 && renderComponentGroup(organisms, 'Organisms')}
     </div>
   );
-}; 
+};
+
