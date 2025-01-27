@@ -1,4 +1,3 @@
-// component-registry.ts
 import { ComponentCategory } from '../types/editor.types';
 
 export interface ComponentDefinition {
@@ -36,7 +35,8 @@ const getComponentIcon = (name: string): string => {
     ImageBox: '🖼️',
     IconBox: '🔲',
     ImageCarousel: '📸',
-    Accordion: '📂', // Icon for Accordion
+    Accordion: '📂',
+    TabMolecule: '📋', // Icon for TabMolecule
   };
   return icons[name] || '📦';
 };
@@ -66,6 +66,7 @@ const getDefaultProps = (name: string): Record<string, any> => {
     Checkbox: { label: 'Checkbox' },
     Switch: { label: 'Switch' },
     Accordion: { items: [{ title: 'Section 1', content: 'Content for section 1' }, { title: 'Section 2', content: 'Content for section 2' }], multiExpand: false },
+    TabMolecule: { tabs: [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }], activeTabIndex: 0 }, // Defaults for TabMolecule
   };
   return defaults[name] || {};
 };
@@ -94,7 +95,8 @@ const getEditableProps = (name: string): string[] => {
     Spinner: ['size'],
     Checkbox: ['label'],
     Switch: ['label'],
-    Accordion: ['items', 'multiExpand'], // Editable properties for Accordion
+    Accordion: ['items', 'multiExpand'],
+    TabMolecule: ['tabs', 'activeTabIndex'], // Editable properties for TabMolecule
   };
   return editableProps[name] || [];
 };
@@ -135,7 +137,8 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
   createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
   createComponentDefinition('Icon', 'atoms', 'ui-icon'),
-  createComponentDefinition('Accordion', 'molecules', 'ui-accordion'), // Added Accordion
+  createComponentDefinition('Accordion', 'molecules', 'ui-accordion'),
+  createComponentDefinition('TabMolecule', 'molecules', 'w-tabs'), // Added TabMolecule
   createComponentDefinition('Card', 'molecules', 'ui-card'),
   createComponentDefinition('SearchBar', 'molecules', 'ui-search-bar'),
   createComponentDefinition('Header', 'molecules', 'ui-header'),
