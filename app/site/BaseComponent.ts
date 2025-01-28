@@ -1,6 +1,3 @@
-/// <reference lib="dom" />
-/// <reference lib="dom.iterable" />
-
 import { Theme, defaultTheme } from './theme/theme';
 
 interface ComponentProps {

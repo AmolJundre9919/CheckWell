@@ -1,8 +1,5 @@
 export interface ThemeColors {
-  primary: {
-    main: string;
-    contrastText: string;
-  };
+  primary: string;
   secondary: string;
   accent: string;
   background: string;
@@ -13,10 +10,8 @@ export interface ThemeColors {
   success: string;
   border: string;
   muted: string;
-  default: {
-    main: string;
-    contrastText: string;
-  };
+  hover: string; // Added hover color to match with accordion styles
+  lightBackground: string; // Added lightBackground color to match with accordion styles
 }
 
 export interface ThemeSpacing {
@@ -28,7 +23,6 @@ export interface ThemeSpacing {
 }
 
 export interface ThemeTypography {
-  fontFamily: any;
   xs: string;
   sm: string;
   base: string;
@@ -49,10 +43,7 @@ export interface Theme {
 
 export const defaultTheme: Theme = {
   colors: {
-    primary: {
-      main: '#007bff',
-      contrastText: '#ffffff'
-    },
+    primary: '#0066ff',
     secondary: '#e5e7eb',
     accent: '#6366f1',
     background: '#ffffff',
@@ -63,10 +54,8 @@ export const defaultTheme: Theme = {
     success: '#10b981',
     border: '#e2e8f0',
     muted: '#f0f0f0',
-    default: {
-      main: '#000000',
-      contrastText: '#ffffff'
-    }
+    hover: '#f1f1f1', // Added hover color for interactive elements
+    lightBackground: '#f8f9fa' // Added lightBackground color for content areas like accordion
   },
   spacing: {
     xs: '0.5rem',
@@ -76,7 +65,6 @@ export const defaultTheme: Theme = {
     xl: '2rem'
   },
   typography: {
-    fontFamily: 'system-ui, sans-serif',
     xs: '0.75rem',
     sm: '0.875rem',
     base: '1rem',
@@ -88,4 +76,4 @@ export const defaultTheme: Theme = {
     md: '8px',
     lg: '16px'
   }
-}; 
+};
