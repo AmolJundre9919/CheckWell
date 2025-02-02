@@ -7,7 +7,7 @@ export interface ComponentDefinition {
   icon: string;
   defaultProps: Record<string, any>;
   editableProps: string[];
-} 
+}
 
 // Utility function to get the icon for each component by name
 const getComponentIcon = (name: string): string => {
@@ -37,6 +37,17 @@ const getComponentIcon = (name: string): string => {
     ImageCarousel: '📸',
     Accordion: '📂',
     TabMolecule: '📋', // Icon for TabMolecule
+    SocialIcons: '🌐', // Icon for SocialIcons
+    Testimonial: '💬', // Icon for Testimonial
+    TextPath: '🖋️', // Icon for TextPath
+    Video: '🎥', // Icon for Video
+    Alert: '⚠️', // Icon for Alert
+    BasicGallery: '🖼️', // Icon for BasicGallery
+    ChipMolecule: '💡', // Icon for ChipMolecule
+    CounterMolecule: '🔢', // Icon for CounterMolecule
+    IconListMolecule: '📝', // Icon for IconListMolecule
+    Ratings: '⭐', // Icon for Ratings
+    ReadMoreMolecule: '📖', // Icon for ReadMoreMolecule
   };
   return icons[name] || '📦';
 };
@@ -66,7 +77,18 @@ const getDefaultProps = (name: string): Record<string, any> => {
     Checkbox: { label: 'Checkbox' },
     Switch: { label: 'Switch' },
     Accordion: { items: [{ title: 'Section 1', content: 'Content for section 1' }, { title: 'Section 2', content: 'Content for section 2' }], multiExpand: false },
-    TabMolecule: { tabs: [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }], activeTabIndex: 0 }, // Defaults for TabMolecule
+    TabMolecule: { tabs: [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }], activeTabIndex: 0 },
+    SocialIcons: { icons: [], size: 'medium', color: '#000', hoverColor: '#007bff', spacing: '1rem', alignment: 'center', showLabels: true },
+    Testimonial: { quote: 'This is a great testimonial!', author: 'John Doe', role: 'Customer', avatar: 'https://via.placeholder.com/60', rating: 5, backgroundColor: '#007bff', textColor: '#ffffff', alignment: 'left' },
+    TextPath: { path: 'M10 80 Q 95 10 180 80', text: 'Your curved text here', fontSize: '16', fill: '#007bff', textAlign: 'start', startOffset: '0', letterSpacing: '0' },
+    Video: { src: '', type: 'video/mp4', width: '100%', height: 'auto', autoplay: false, controls: true, loop: false, muted: false, poster: '', preload: 'metadata' },
+    Alert: { message: 'This is an alert!', type: 'info', dismissible: true, icon: '⚠️' },
+    BasicGallery: { images: [{ src: 'https://via.placeholder.com/300x200', alt: 'Gallery Image 1' }, { src: 'https://via.placeholder.com/300x200', alt: 'Gallery Image 2' }], columns: 3, caption: 'Basic Gallery' },
+    ChipMolecule: { label: 'Chip Label', color: '#007bff', icon: '', size: 'medium', removable: false },
+    CounterMolecule: { count: 0, min: 0, max: 100, step: 1 },
+    IconListMolecule: { icons: [{ icon: '🔗', label: 'Link 1' }, { icon: '📞', label: 'Link 2' }], size: 'medium', spacing: '1rem', alignment: 'left' },
+    Ratings: { rating: 3, maxRating: 5, icon: '⭐' },
+    ReadMoreMolecule: { content: 'This is the content preview...', fullContent: 'This is the full content shown after clicking Read More...', expanded: false }
   };
   return defaults[name] || {};
 };
@@ -96,7 +118,18 @@ const getEditableProps = (name: string): string[] => {
     Checkbox: ['label'],
     Switch: ['label'],
     Accordion: ['items', 'multiExpand'],
-    TabMolecule: ['tabs', 'activeTabIndex'], // Editable properties for TabMolecule
+    TabMolecule: ['tabs', 'activeTabIndex'],
+    SocialIcons: ['icons', 'size', 'color', 'hover-color', 'spacing', 'alignment', 'show-labels'],
+    Testimonial: ['quote', 'author', 'role', 'avatar', 'rating', 'background-color', 'text-color', 'alignment'],
+    TextPath: ['path', 'text', 'font-size', 'fill', 'text-align', 'start-offset', 'letter-spacing'],
+    Video: ['src', 'type', 'width', 'height', 'autoplay', 'controls', 'loop', 'muted', 'poster', 'preload'],
+    Alert: ['message', 'type', 'dismissible', 'icon'],
+    BasicGallery: ['images', 'columns', 'caption'],
+    ChipMolecule: ['label', 'color', 'icon', 'size', 'removable'],
+    CounterMolecule: ['count', 'min', 'max', 'step'],
+    IconListMolecule: ['icons', 'size', 'spacing', 'alignment'],
+    Ratings: ['rating', 'maxRating', 'icon'],
+    ReadMoreMolecule: ['content', 'fullContent', 'expanded'],
   };
   return editableProps[name] || [];
 };
@@ -132,16 +165,27 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition('Divider', 'atoms', 'ui-divider'),
   createComponentDefinition('Image', 'atoms', 'ui-image'),
   createComponentDefinition('ImageBox', 'molecules', 'ui-image-box'),
-  createComponentDefinition('IconBox', 'molecules', 'ui-icon-box'), 
+  createComponentDefinition('IconBox', 'molecules', 'ui-icon-box'),
   createComponentDefinition('ImageCarousel', 'molecules', 'ui-image-carousel'),
   createComponentDefinition('GoogleMap', 'atoms', 'ui-google-map'),
   createComponentDefinition('Spinner', 'atoms', 'ui-spinner'),
   createComponentDefinition('Icon', 'atoms', 'ui-icon'),
   createComponentDefinition('Accordion', 'molecules', 'ui-accordion'),
-  createComponentDefinition('TabMolecule', 'molecules', 'w-tabs'), // Added TabMolecule
+  createComponentDefinition('TabMolecule', 'molecules', 'w-tabs'),
   createComponentDefinition('Card', 'molecules', 'ui-card'),
   createComponentDefinition('SearchBar', 'molecules', 'ui-search-bar'),
   createComponentDefinition('Header', 'molecules', 'ui-header'),
+  createComponentDefinition('SocialIcons', 'molecules', 'ui-social-icons'),
+  createComponentDefinition('Testimonial', 'molecules', 'ui-testimonial'),
+  createComponentDefinition('TextPath', 'molecules', 'ui-text-path'),
+  createComponentDefinition('Video', 'molecules', 'ui-video'),
+  createComponentDefinition('Alert', 'molecules', 'ui-alert'),
+  createComponentDefinition('BasicGallery', 'molecules', 'ui-gallery'),
+  createComponentDefinition('ChipMolecule', 'molecules', 'ui-chip'),
+  createComponentDefinition('CounterMolecule', 'molecules', 'ui-counter'),
+  createComponentDefinition('IconListMolecule', 'molecules', 'ui-icon-list'),
+  createComponentDefinition('Ratings', 'molecules', 'ui-ratings'),
+  createComponentDefinition('ReadMoreMolecule', 'molecules', 'ui-read-more'),
 ];
 
 // Function to get a component by its name
