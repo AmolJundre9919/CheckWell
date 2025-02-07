@@ -74,6 +74,9 @@ const getComponentIcon = (name: string): string => {
     PricingTable: "📊",
     Logos: "🏢",
     MinimalistBio: "👤",
+    Slides: "🖼️",
+    AnimatedHeadline: "✨",
+
   }
   return icons[name] || "📦"
 }
@@ -324,6 +327,16 @@ const getDefaultProps = (name: string): Record<string, any> => {
       avatar: "https://via.placeholder.com/100",
       links: [{ label: "Website", url: "#" }],
     },
+    Slides: {
+      slides: [
+        { image: "https://via.placeholder.com/800x400", caption: "Slide 1" },
+        { image: "https://via.placeholder.com/800x400", caption: "Slide 2" },
+      ],
+    },
+    AnimatedHeadline: {
+      headlines: ["First Headline", "Second Headline", "Third Headline"],
+      animationType: "fade",
+    },
   }
   return defaults[name] || {}
 }
@@ -406,6 +419,8 @@ const getEditableProps = (name: string): string[] => {
     PricingTable: ["plans"],
     Logos: ["items"],
     MinimalistBio: ["name", "avatar", "links"],
+    Slides: ["slides"],
+    AnimatedHeadline: ["headlines", "animation-type"],
   }
   return editableProps[name] || []
 }
@@ -488,6 +503,8 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition("PricingTable", "molecules", "w-pricing-table"),
   createComponentDefinition("Logos", "molecules", "w-logos"),
   createComponentDefinition("MinimalistBio", "molecules", "w-minimalist-bio"),
+  createComponentDefinition("Slides", "molecules", "w-slides"),
+  createComponentDefinition("AnimatedHeadline", "molecules", "w-animated-headline"),
 ]
 
 // Function to get a component by its name
