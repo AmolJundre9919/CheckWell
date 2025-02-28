@@ -3,12 +3,12 @@ import { BaseComponent } from "@/app/site/BaseComponent";
 export type ComponentCategory = 'atoms' | 'molecules' | 'organisms';
 export type ViewMode = 'desktop' | 'mobile';
 
-export interface ComponentPosition {
+export interface Position {
   x: number;
   y: number;
 }
 
-export interface ComponentSize {
+export interface Size {
   width: number;
   height: number;
 }
@@ -16,16 +16,9 @@ export interface ComponentSize {
 export interface PlacedComponent {
   id: string;
   name: string;
-  type: string;
+  position: Position;
+  size: Size;
   props: Record<string, any>;
-  position: {
-    x: number;
-    y: number;
-  };
-  size: {
-    width: number;
-    height: number;
-  };
   children?: PlacedComponent[];
 }
 
@@ -48,4 +41,9 @@ export interface PropertyDefinition {
   options?: { label: string; value: string }[];
   min?: number;
   max?: number;
+}
+
+export interface ComponentData {
+  name: string;
+  defaultProps: Record<string, any>;
 } 
