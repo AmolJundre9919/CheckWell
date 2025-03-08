@@ -76,7 +76,7 @@ const getComponentIcon = (name: string): string => {
     MinimalistBio: "👤",
     Slides: "🖼️",
     AnimatedHeadline: "✨",
-
+    AppointmentForm: "📅",
   }
   return icons[name] || "📦"
 }
@@ -337,6 +337,22 @@ const getDefaultProps = (name: string): Record<string, any> => {
       headlines: ["First Headline", "Second Headline", "Third Headline"],
       animationType: "fade",
     },
+    AppointmentForm: {
+      recaptchaSiteKey: "6Ld_0-sqAAAAAEzyTtxGId5iSHUXE3e9qO9AOtxH",
+      csrfToken: "",
+      availableTimeSlots: [
+        { start: "09:00", end: "10:00", available: true },
+        { start: "10:00", end: "11:00", available: true },
+        { start: "11:00", end: "12:00", available: true },
+        { start: "13:00", end: "14:00", available: true },
+        { start: "14:00", end: "15:00", available: true }
+      ],
+      serviceTypes: [
+        { id: "1", name: "Consultation" },
+        { id: "2", name: "Follow-up" },
+        { id: "3", name: "General Checkup" }
+      ]
+    },
   }
   return defaults[name] || {}
 }
@@ -421,6 +437,12 @@ const getEditableProps = (name: string): string[] => {
     MinimalistBio: ["name", "avatar", "links"],
     Slides: ["slides"],
     AnimatedHeadline: ["headlines", "animation-type"],
+    AppointmentForm: [
+      "recaptchaSiteKey",
+      "csrfToken",
+      "availableTimeSlots",
+      "serviceTypes"
+    ],
   }
   return editableProps[name] || []
 }
@@ -505,6 +527,7 @@ export const componentRegistry: ComponentDefinition[] = [
   createComponentDefinition("MinimalistBio", "molecules", "w-minimalist-bio"),
   createComponentDefinition("Slides", "molecules", "w-slides"),
   createComponentDefinition("AnimatedHeadline", "molecules", "w-animated-headline"),
+  createComponentDefinition("AppointmentForm", "molecules", "ui-appointment-form"),
 ]
 
 // Function to get a component by its name

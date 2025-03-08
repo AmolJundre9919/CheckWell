@@ -10,6 +10,7 @@ import './atoms/navigation/NavigationAtom';
 import './atoms/navigation/NavigationLinkAtom';
 import './atoms/layout/GridAtom';
 import './atoms/layout/ContainerAtom';
+import './atoms/inputs/AppointmentFormAtom';
 
 // Import all molecules
 import './molecules/CardMolecule';
